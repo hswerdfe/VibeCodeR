@@ -1,0 +1,92 @@
+<svg viewBox="0 0 200 231" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hexagon background -->
+  <path d="M50 15.5L150 15.5L200 100L150 184.5L50 184.5L0 100Z" 
+        fill="#7C3AED" stroke="#A855F7" stroke-width="3"/>
+  
+  <defs>
+    <linearGradient id="purpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#A855F7;stop-opacity:1"/>
+      <stop offset="50%" style="stop-color:#7C3AED;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#5B21B6;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06FFA5;stop-opacity:0.8"/>
+      <stop offset="50%" style="stop-color:#00D4FF;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#06FFA5;stop-opacity:0.8"/>
+    </linearGradient>
+    <filter id="textGlow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <path d="M50 15.5L150 15.5L200 100L150 184.5L50 184.5L0 100Z" 
+        fill="url(#purpleGradient)"/>
+  
+  <!-- Sound/vibe waves -->
+  <path d="M30 90 Q50 85 70 90 Q90 95 110 90 Q130 85 150 90 Q170 95 190 90" 
+        stroke="url(#waveGradient)" stroke-width="3" fill="none" opacity="0.8">
+    <animate attributeName="d" 
+             values="M30 90 Q50 85 70 90 Q90 95 110 90 Q130 85 150 90 Q170 95 190 90;
+                     M30 90 Q50 95 70 90 Q90 85 110 90 Q130 95 150 90 Q170 85 190 90;
+                     M30 90 Q50 85 70 90 Q90 95 110 90 Q130 85 150 90 Q170 95 190 90" 
+             dur="3s" repeatCount="indefinite"/>
+  </path>
+  
+  <path d="M40 100 Q60 95 80 100 Q100 105 120 100 Q140 95 160 100" 
+        stroke="url(#waveGradient)" stroke-width="2" fill="none" opacity="0.6">
+    <animate attributeName="d" 
+             values="M40 100 Q60 95 80 100 Q100 105 120 100 Q140 95 160 100;
+                     M40 100 Q60 105 80 100 Q100 95 120 100 Q140 105 160 100;
+                     M40 100 Q60 95 80 100 Q100 105 120 100 Q140 95 160 100" 
+             dur="2.5s" repeatCount="indefinite"/>
+  </path>
+  
+  <path d="M50 110 Q70 105 90 110 Q110 115 130 110 Q150 105 170 110" 
+        stroke="url(#waveGradient)" stroke-width="1.5" fill="none" opacity="0.4">
+    <animate attributeName="d" 
+             values="M50 110 Q70 105 90 110 Q110 115 130 110 Q150 105 170 110;
+                     M50 110 Q70 115 90 110 Q110 105 130 110 Q150 115 170 110;
+                     M50 110 Q70 105 90 110 Q110 115 130 110 Q150 105 170 110" 
+             dur="3.5s" repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Central R with modern font -->
+  <text x="100" y="120" text-anchor="middle" font-family="sans-serif" font-size="48" 
+        font-weight="900" fill="white" filter="url(#textGlow)">R</text>
+  
+  <!-- LLM/AI chips -->
+  <rect x="60" y="45" width="25" height="8" rx="4" fill="#00D4FF" opacity="0.8"/>
+  <text x="72.5" y="51" text-anchor="middle" font-family="monospace" font-size="6" fill="white">LLM</text>
+  
+  <rect x="115" y="45" width="20" height="8" rx="4" fill="#00D4FF" opacity="0.8"/>
+  <text x="125" y="51" text-anchor="middle" font-family="monospace" font-size="6" fill="white">AI</text>
+  
+  <!-- Coding elements -->
+  <circle cx="45" cy="65" r="3" fill="#FBBF24" opacity="0.9"/>
+  <circle cx="155" cy="65" r="3" fill="#FBBF24" opacity="0.9"/>
+  <text x="45" y="68" text-anchor="middle" font-family="monospace" font-size="8" fill="white">&lt;</text>
+  <text x="155" y="68" text-anchor="middle" font-family="monospace" font-size="8" fill="white">/&gt;</text>
+  
+  <!-- Floating particles -->
+  <circle cx="70" cy="140" r="1.5" fill="#06FFA5" opacity="0.7">
+    <animate attributeName="cy" values="140;135;140" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="130" cy="140" r="1.5" fill="#06FFA5" opacity="0.7">
+    <animate attributeName="cy" values="140;145;140" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="100" cy="145" r="1" fill="#06FFA5" opacity="0.5">
+    <animate attributeName="cy" values="145;140;145" dur="1.8s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Package name -->
+  <text x="100" y="170" text-anchor="middle" font-family="sans-serif" 
+        font-size="17" font-weight="bold" fill="white">VibeCodeR</text>
+  
+  <!-- Tagline -->
+  <text x="100" y="185" text-anchor="middle" font-family="sans-serif" 
+        font-size="8" fill="#E2E8F0">Code with the Flow</text>
+</svg>

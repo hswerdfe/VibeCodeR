@@ -1,0 +1,24 @@
+<svg width="300" height="346" viewBox="0 0 300 346" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hexagon background -->
+  <polygon points="150,10 290,85 290,260 150,335 10,260 10,85"
+           fill="#1e1e2f" stroke="#5eead4" stroke-width="6"/>
+
+  <!-- Stylized V -->
+  <text x="50%" y="130" text-anchor="middle" font-family="monospace"
+        font-size="64" fill="#5eead4" font-weight="bold">V</text>
+
+  <!-- AI Spark / Brain motif -->
+  <circle cx="110" cy="180" r="10" fill="#f472b6"/>
+  <circle cx="140" cy="170" r="6" fill="#f472b6"/>
+  <circle cx="160" cy="190" r="5" fill="#f472b6"/>
+  <circle cx="180" cy="170" r="6" fill="#f472b6"/>
+  <circle cx="190" cy="200" r="8" fill="#f472b6"/>
+
+  <!-- Curved code brackets -->
+  <text x="30" y="200" font-family="monospace" font-size="48" fill="#e2e8f0">{</text>
+  <text x="255" y="200" font-family="monospace" font-size="48" fill="#e2e8f0">}</text>
+
+  <!-- Package Name -->
+  <text x="50%" y="265" text-anchor="middle" font-family="monospace"
+        font-size="24" fill="#5eead4">VibeCodeR</text>
+</svg>

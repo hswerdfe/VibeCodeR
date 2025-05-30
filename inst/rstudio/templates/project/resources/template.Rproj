@@ -1,0 +1,28 @@
+Version: 1.0
+
+General:
+  RVersion: 4.0.0
+
+WorkspaceRestore:
+  Restore: Default
+
+SaveWorkspace:
+  Save: Default
+
+AlwaysSaveHistory:
+  Save: Default
+
+EnableCodeIndexing:
+  Index: Yes
+
+UseSpacesForTab:
+  Use: Yes
+
+NumSpacesForTab:
+  Num: 2
+
+AutoAppendNewline:
+  Append: Yes
+
+StripTrailingWhitespace:
+  Strip: Yes

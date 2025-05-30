@@ -1,0 +1,59 @@
+<svg viewBox="0 0 200 231" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hexagon background -->
+  <path d="M50 15.5L150 15.5L200 100L150 184.5L50 184.5L0 100Z" 
+        fill="#1E3A8A" stroke="#3B82F6" stroke-width="3"/>
+  
+  <!-- Gradient overlay for depth -->
+  <defs>
+    <linearGradient id="hexGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#1E3A8A;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="rGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60A5FA"/>
+      <stop offset="100%" style="stop-color:#93C5FD"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <path d="M50 15.5L150 15.5L200 100L150 184.5L50 184.5L0 100Z" 
+        fill="url(#hexGradient)"/>
+  
+  <!-- Large R letter -->
+  <text x="50" y="110" font-family="serif" font-size="60" font-weight="bold" 
+        fill="url(#rGradient)" filter="url(#glow)">R</text>
+  
+  <!-- AI/Neural network nodes -->
+  <circle cx="130" cy="60" r="4" fill="#34D399" opacity="0.9"/>
+  <circle cx="150" cy="80" r="3" fill="#34D399" opacity="0.8"/>
+  <circle cx="170" cy="70" r="3" fill="#34D399" opacity="0.7"/>
+  <circle cx="140" cy="40" r="2" fill="#34D399" opacity="0.6"/>
+  
+  <!-- Connection lines between nodes -->
+  <line x1="130" y1="60" x2="150" y2="80" stroke="#34D399" stroke-width="1.5" opacity="0.6"/>
+  <line x1="150" y1="80" x2="170" y2="70" stroke="#34D399" stroke-width="1.5" opacity="0.6"/>
+  <line x1="130" y1="60" x2="140" y2="40" stroke="#34D399" stroke-width="1.5" opacity="0.6"/>
+  
+  <!-- Code brackets suggesting programming -->
+  <text x="30" y="150" font-family="monospace" font-size="18" fill="#A78BFA" opacity="0.8">{</text>
+  <text x="160" y="150" font-family="monospace" font-size="18" fill="#A78BFA" opacity="0.8">}</text>
+  
+  <!-- Small decorative elements suggesting "vibes" -->
+  <circle cx="160" cy="130" r="2" fill="#F59E0B" opacity="0.8"/>
+  <circle cx="150" cy="140" r="1.5" fill="#F59E0B" opacity="0.6"/>
+  <circle cx="170" cy="140" r="1" fill="#F59E0B" opacity="0.4"/>
+  
+  <!-- Package name -->
+  <text x="100" y="170" text-anchor="middle" font-family="sans-serif" 
+        font-size="16" font-weight="bold" fill="white">VibeCodeR</text>
+  
+  <!-- Subtle tagline -->
+  <text x="100" y="185" text-anchor="middle" font-family="sans-serif" 
+        font-size="8" fill="#94A3B8">AI-Powered R Coding</text>
+</svg>

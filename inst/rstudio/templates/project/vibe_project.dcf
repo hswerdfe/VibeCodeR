@@ -1,0 +1,35 @@
+Binding: create_vibe_project
+Title: Vibe Project
+OpenFiles: welcome.R
+Icon: icon.png
+
+Parameter: project_name
+Widget: TextInput
+Label: Project Name
+Default: MyVibeProject
+Position: left
+
+Parameter: project_goal
+Widget: TextInput
+Label: Project Goal
+Default: Describe what you want to achieve with this project...
+Position: left
+
+Parameter: include_readme
+Widget: CheckboxInput
+Label: Include README file
+Default: On
+Position: right
+
+Parameter: vibe_level
+Widget: SelectInput
+Label: Vibe Level
+Fields: Chill, Moderate, Intense
+Default: Moderate
+Position: left
+
+Parameter: music_genre
+Widget: TextInput
+Label: Preferred Music Genre
+Default: Lo-fi
+Position: right

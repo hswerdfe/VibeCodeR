@@ -1,0 +1,20 @@
+<svg width="300" height="346" viewBox="0 0 300 346" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hexagon -->
+  <polygon points="150,10 290,85 290,260 150,335 10,260 10,85"
+           fill="#111827" stroke="#10b981" stroke-width="6"/>
+
+  <!-- Brain-like structure -->
+  <path d="M120 150 Q130 130 150 150 T180 150 Q170 170 150 160 T120 150"
+        stroke="#10b981" stroke-width="2" fill="none"/>
+  <circle cx="130" cy="145" r="4" fill="#10b981"/>
+  <circle cx="170" cy="145" r="4" fill="#10b981"/>
+  <circle cx="150" cy="155" r="4" fill="#10b981"/>
+
+  <!-- Terminal prompt -->
+  <text x="50%" y="100" text-anchor="middle"
+        font-family="monospace" font-size="28" fill="#f9fafb">R &gt; vibe()</text>
+
+  <!-- Package Name -->
+  <text x="50%" y="310" text-anchor="middle"
+        font-family="monospace" font-size="22" fill="#10b981">VibeCodeR</text>
+</svg>

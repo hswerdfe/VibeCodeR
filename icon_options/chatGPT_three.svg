@@ -1,0 +1,25 @@
+<svg width="300" height="346" viewBox="0 0 300 346" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vibeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Hexagon -->
+  <polygon points="150,10 290,85 290,260 150,335 10,260 10,85"
+           fill="url(#vibeGradient)" stroke="#e2e8f0" stroke-width="6"/>
+
+  <!-- Vibrating V -->
+  <text x="50%" y="150" text-anchor="middle"
+        font-family="monospace" font-size="72" fill="#ffffff" font-weight="bold"
+        transform="rotate(-2,150,150)">V</text>
+
+  <!-- Spark -->
+  <polygon points="150,180 155,195 170,195 158,205 162,220 150,210 138,220 142,205 130,195 145,195"
+           fill="#fcd34d"/>
+
+  <!-- Package Name -->
+  <text x="50%" y="310" text-anchor="middle"
+        font-family="Courier New, monospace" font-size="22" fill="#ffffff">VibeCodeR</text>
+</svg>
