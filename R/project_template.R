@@ -15,10 +15,7 @@
 create_vibe_project <- function(
     path,
     project_name = "MyVibeProject",
-    project_goal = "Describe what you want to achieve with this project...",
     include_readme = TRUE,
-    vibe_level = "Moderate",
-    music_genre = "Lo-fi",
     ...
 ) {
 
@@ -29,10 +26,7 @@ create_vibe_project <- function(
   # Get the parameters passed from the template form
   params <- list(
     project_name = project_name,
-    project_goal = project_goal,
     include_readme = include_readme,
-    vibe_level = vibe_level,
-    music_genre = music_genre,
     ...
   )
 
@@ -65,14 +59,11 @@ create_vibe_project <- function(
     "# Created on: ", Sys.Date(), "\n",
     "#\n",
     "# Project: ", project_name, "\n",
-    "# Goal: ", project_goal, "\n",
-    "# Vibe Level: ", vibe_level, "\n",
-    "# Music Genre: ", music_genre, "\n",
     "#\n"
   )
 
   # Add any custom parameters from the form
-  if (length(params) > 5) {  # More than the standard 5 parameters
+  if (length(params) > 2) {  # More than the standard  parameters
     welcome_content <- paste0(welcome_content, "# Additional parameters:\n")
     extra_params <- params[!names(params) %in% c("project_name", "project_goal", "include_readme", "vibe_level", "music_genre")]
     for (name in names(extra_params)) {
@@ -90,10 +81,7 @@ create_vibe_project <- function(
     readme_content <- paste0(
       "# ", project_name, "\n\n",
       "## Project Goal\n\n",
-      project_goal, "\n\n",
       "## Project Details\n\n",
-      "- **Vibe Level**: ", vibe_level, "\n",
-      "- **Music Genre**: ", music_genre, "\n",
       "- **Created**: ", Sys.Date(), "\n\n",
       "This is a Vibe project created with VibeCodeR!\n\n",
       "## Getting Started\n\n",
@@ -103,6 +91,21 @@ create_vibe_project <- function(
 
     writeLines(readme_content, file.path(path, "README.md"))
   }
+
+
+  default_results <- user_input_dot_project_files(path = path)
+
+  path_coder = path |> file.path('.VibeCodeR')
+  if (!dir.exists(path_coder)) {
+    dir.create(path_coder, recursive = TRUE)
+  }
+  default_results |>
+    purrr::iwalk(~{
+      print(.y)
+      if (nchar(.x) > 0 ){
+        writeLines(.x, file.path(path_coder, paste0('.', .y, '.config')))
+      }
+    })
 
   invisible(TRUE)
 }

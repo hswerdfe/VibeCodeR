@@ -7,10 +7,7 @@
 create_vibe_project(
   path,
   project_name = "MyVibeProject",
-  project_goal = "Describe what you want to achieve with this project...",
   include_readme = TRUE,
-  vibe_level = "Moderate",
-  music_genre = "Lo-fi",
   ...
 )
 }
@@ -19,15 +16,15 @@ create_vibe_project(
 
 \item{project_name}{Name of the project}
 
-\item{project_goal}{Description of the project goal}
-
 \item{include_readme}{Whether to include README}
+
+\item{...}{Additional parameters from the template form}
+
+\item{project_goal}{Description of the project goal}
 
 \item{vibe_level}{The vibe level selected}
 
 \item{music_genre}{Preferred music genre}
-
-\item{...}{Additional parameters from the template form}
 }
 \description{
 This function is called when creating a new Vibe project from the RStudio template.
