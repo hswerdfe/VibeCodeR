@@ -135,7 +135,9 @@ cursor_selection <- function(context = NULL) {
 #' @return Invisibly returns TRUE if text was inserted via RStudio API,
 #'         or FALSE if it was printed to the console.
 #' @export         
-insert_text <- function(text, location = NULL, context = NULL) {
+insert_text <- function(text, 
+                        location = NULL, 
+                        context = NULL) {
   if ( ! has_rstudio_api()) {
     # Fallback: no cursor info available
     cat(text, "\n")
@@ -146,14 +148,15 @@ insert_text <- function(text, location = NULL, context = NULL) {
   location <- 
     if ( is.null(location)  ){
       if ( ! is.null(context)  ){
+        # Moves the cursor to the start of the line containing the start of the selection.
         rstudioapi::document_position(context$selection[[1]]$range$start["row"], 1)
       }else{
-        # Insert text at current selection
+        # Replaces the current selection.
         rstudioapi::insertText(text = text)
         return (invisible(text))
       }
     }
-
+  text = ''
 
     # insert at the given context
     rstudioapi::insertText(

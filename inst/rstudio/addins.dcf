@@ -8,6 +8,11 @@ Description: Inserts a function at the current cursor position. based on specs g
 Binding: generate_function
 Interactive: true
 
+Name: Generate Changes
+Description: Change Code, tell llm what to do, then aprove changes.
+Binding: generate_changes
+Interactive: true
+
 Name: VibeCodeR Defaults
 Description: generates and or checks the defaults for VibeCodeR
 Binding: user_input_dot_project_files
