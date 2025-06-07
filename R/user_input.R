@@ -70,7 +70,7 @@ user_input <- function(questions, dialogName = "Questions", width = 800, height 
       default <- q$default
 
       if (!is.null(q$type) && q$type == "logical") {
-        ui_elements[[i]] <- checkboxInput(input_id, label = q$question, value = if (!is.null(default)) default else FALSE)
+        ui_elements[[i]] <- checkboxInput(input_id, label = q$question, value = if (!is.null(default)) as.logical(default) else FALSE)
       } else if (!is.null(q$type) && q$type == "numericRange") {
         if (is.null(q$range) || length(q$range) != 2 || !is.numeric(q$range)) {
           stop(paste("Question", i, "with type 'numericRange' must have a numeric 'range' of length 2"))
@@ -132,8 +132,13 @@ user_input <- function(questions, dialogName = "Questions", width = 800, height 
       stopApp(answers)
     })
   }
-
-  runGadget(ui, server, viewer = dialogViewer(dialogName = dialogName, width = width, height = height))
+  print('before runGadget')
+  ret_val <- shiny::runGadget(ui, server, 
+                              #viewer = shiny::dialogViewer(dialogName = dialogName, width = width, height = height), 
+                              stopOnCancel = TRUE
+              )
+  print('after runGadget')
+  ret_val
 }
 
 

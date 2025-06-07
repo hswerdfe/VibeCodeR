@@ -1,27 +1,76 @@
 
-
+#' Generate a formatted prompt string with rules and optional headers/footers
+#'
+#' This function constructs a formatted text prompt by combining a prefix (e.g., instructions),
+#' a list of rules (each optionally prefixed with a list item marker), and a postfix (e.g., 
+#' a lead-in for code). Each component is joined with newline characters for readability.
+#'
+#' @param vector_rules A character vector of rule strings to include in the body of the prompt.
+#' @param prefixes A character vector or single string to prepend before the rules (default: 'Follow these rules').
+#' @param postfixes A character vector or single string to append after the rules (default: 'R code below:').
+#' @param list_item A string used to prefix each rule item (default: ' - ').
+#' @param collapse_char Collapse the different lines together (default : '\n').a
+#'
+#' @return A single character string containing the formatted prompt.
+#' 
+#' @examples
+#' generate_pre_prompt(
+#'   vector_rules = c("Do not use external libraries", "Use vectorized operations"),
+#'   prefixes = "Please follow these coding rules:",
+#'   postfixes = "Here is the R code:"
+#' )
+#'
+#' @export
 generate_pre_prompt <- function(
     vector_rules,
     prefixes = 'Follow these rules',
     postfixes ="R code below:",
-    list_item = ' - '
+    list_item = ' - ',
+    collapse_char = '\n'
 ){
   c(
     prefixes |>
-      paste(collapse = '\n'),
+      paste(collapse = collapse_char),
     vector_rules |>
       (\(x) paste0(list_item, x))() |>
-      paste(collapse = '\n'),
+      paste(collapse = collapse_char),
     postfixes |>
-      paste(collapse = '\n')
+      paste(collapse = collapse_char)
   ) |>
-    paste(collapse = '\n')
+    paste(collapse = collapse_char)
 }
 
 
 
-
-user_input_dot_project_files <- function(path = here::here(),  dialogName = 'Default values to use with this project'){
+#' Collect and Store Default Project Configuration Inputs
+#'
+#' This function creates and stores a set of default configuration files in a hidden `.VibeCodeR` directory within a project. These configurations include project goals, style guidelines, prompts for documentation and testing, and API service credentials. It presents a user-friendly dialog for input and saves responses to file for reuse.
+#'
+#' @description
+#' Prompts the user (via a UI dialog) to input or confirm default values for various project configuration elements such as goals, style guides, roxygen prompts, unit test prompts, and preferred LLM service credentials. These values are saved as individual config files inside a `.VibeCodeR` directory within the given path.
+#'
+#' @details
+#' The function ensures that consistent and reusable prompts or configuration values are collected at the start of a project. It checks for existing `.config` files, pre-populates the dialog fields with their contents if found, and writes new inputs back to those files. It's ideal for integration with LLM-based tooling or scaffolding systems.
+#'
+#' @param path Character. Path to the root of the project (default is `here::here()`).
+#' @param dialogName Character. Title to be displayed on the user dialog box (default is `"Default values to use with this project"`).
+#'
+#' @return
+#' (Invisibly) returns a named list of responses corresponding to the configuration fields.
+#'
+#' @examples
+#' \dontrun{
+#'   responses <- user_input_dot_project_files()
+#'   responses$project_goals
+#' }
+#'
+#' @export
+#' @author Howard Swerdfeger
+user_input_dot_project_files <- function(
+    path = here::here(),  
+    dialogName = 'Default values to use with this project',
+    path_coder = path |> file.path('.VibeCodeR')
+){
   
   
   
@@ -40,17 +89,17 @@ user_input_dot_project_files <- function(path = here::here(),  dialogName = 'Def
     "Add a space after commas and around operators (x + y, not x+y).",
     "Use TRUE and FALSE (not T and F).",
     "Put a space before and after control structures (if, for, while).",
-    "Use consistent naming for functions (snake_case or camelCase, pick one).",
+    "Use consistent snake_case naming for functions",
     "Write comments starting with # and a space.",
     "Include a blank line between function definitions.",
     "Use function_name <- function(...) to define functions.",
     "Avoid deeply nested code when possible.",
     "Use NA for missing values, not NULL or ''.",
-    "Load libraries at the top of the script.",
+    "Load libraries at the top of the script, but only if needed.",
     "Keep one statement per line.",
     "Avoid using attach() and detach().",
     "Prefer lapply(), sapply(), and purrr functions over loops.",
-    "Document functions with comments or roxygen-style blocks.",
+    "When Documenting functions with comments or roxygen-style blocks.",
     "Use library() instead of require() in scripts.",
     "End scripts with a newline.",
     "Use fully qualified names (e.g., purrr::map()) to avoid conflicts between packages.",
@@ -83,52 +132,93 @@ user_input_dot_project_files <- function(path = here::here(),  dialogName = 'Def
     )
   
   
+  default_function_generation_prompt <-
+    c("Output only valid R code, with an appropriate but minimal amout of comments using # ",
+      "Do NOT include any roxygen2 documentation block block at the top",
+      "Do NOT wrap the code in any human readable explaination or markup", 
+      "Assume the libraries neede are already loaded",
+      "if and only if external libraries are used add a comment near the top after <-function in the form # require(<<libarry_name>>)",
+      "add a comment at the top AFTER <-function() summarizing the specification in concise and clear way",
+      "The first line should be something like my_function_name <- function",
+      "The produced code will be sent directy to a .R file", 
+      "Give the R function a name that is appropriate for its purpose"
+      ) |> 
+    generate_pre_prompt(prefixes = c("Create an R function that Follows best practices:"),
+                        postfixes = "R Function Specifications:"
+    )
+  
   
   default_test_that_prompt <- c(
     "Cover normal usage, edge cases, and failure conditions",
     "Use `test_that()` and `expect_` functions appropriately",
     "Provide at least 2–3 distinct tests",
     "Assume `library(testthat)` is loaded",
-    "Return only valid R code with no explanation or markdown\n"
+    "Return only valid R code with no explanation or markdown"
   ) |>
-    generate_pre_prompt(prefixes = c("Generate unit tests for the following R function using the testthat framework.",
+    generate_pre_prompt(prefixes = c("Generate unit tests for the following R code using the testthat framework.",
                                      "Follow best practices:"),
-                        postfixes = "R Function Code:"
+                        postfixes = "R Code:"
     )
   
   
   
+  default_refactor_prompt <- 
+    paste(
+      c(
+        "Try to keep changes minimal",
+        "Return only valid R code with no explanation or markdown",
+        "Return an exact replacement for the indicated code",
+        "Your code will directly and exactly replace the indicated code"
+      ) |>
+      generate_pre_prompt(prefixes = c("Changes are required to the code below Generic Instructions are:"),
+                          postfixes = ""
+      ), 
+      
+      generate_pre_prompt(vector_rules = '{user_specific_instructions}',
+                          prefixes = c("Specific instruction for change are:"),
+                          postfixes = "R Code:"
+      )  
+    )
   
   
-  service_choices <- c("🔑 Gemini" = 'https://ai.google.dev/gemini-api/docs/pricing',
-                       "🔑 Claude" = 'https://www.anthropic.com/pricing',
-                       "🔑 ChatGPT" = 'https://openai.com/api/pricing/',
-                       "🔑 Grok" = 'https://docs.x.ai/docs/models' ,
-                       "🔑 Copilot" = 'https://www.microsoft.com/en-us/store/b/copilotpro')
+  
+  service_choices <- llm_models_all()
+  
+  
+
   questions <- list(
     list(question = "🥅 Project Goals?", type = "textarea", default = defualt_project_goals),
     list(question = "🥻 Generic Project style guides?", type = "textarea", default = default_style_guidelines, rows = 10),
-    list(question = "📝 generate Tests prompt?", type = "textarea", default = default_test_that_prompt, rows = 10),
-    list(question = "📝 generate Roxygen prompt?", type = "textarea", default = default_roxygen_prompt, rows = 10),
-    list(question = '🤖 Default LLM service?', choices = names(service_choices))
+    list(question = "📝 Generate Tests prompt?", type = "textarea", default = default_test_that_prompt, rows = 10),
+    list(question = "📝 Generate Roxygen prompt?", type = "textarea", default = default_roxygen_prompt, rows = 10),
+    list(question = "📝 Generate Function prompt?", type = "textarea", default = default_function_generation_prompt, rows = 10),
+    list(question = "🔧 Refactor Code Prompt?", type = "textarea", default = default_refactor_prompt, rows = 10),
+    list(question = '🤖 Default LLM service?', choices = service_choices),
+    list(question = 'Include Context Libraries in Memmory?',                        type = "logical", default = TRUE),
+    list(question = 'Include Context Libraries Refrenced In Other Parts Of Code?',  type = "logical", default = TRUE),
+    list(question = 'Include Context Currently Selected File?',                     type = "logical", default = TRUE),
+    list(question = 'Include Context All Code in project?',                         type = "logical", default = FALSE),
+    list(question = 'Include Context Functions In Memory?',                         type = "logical", default = FALSE)
   )
   
   
   questions_secrets <-
     service_choices |>
-    purrr::imap(~{
-      paste(.y, 'Secret api key')
+    purrr::map(~{
+      paste(.x, 'Secret api key')
     }) |> unname()
   
-  all_questions <- c(questions, questions_secrets)
-  
-  path_coder = path |> file.path('.VibeCodeR')
   
   
-  all_questions2 <-
-    all_questions |>
+  
+  #all_questions <- c(questions)#, questions_secrets)
+  
+
+  
+  questions2 <-
+    questions |>
     purrr::map(~{
-      #.x <- all_questions[[1]]
+      #.x <- all_questions[[6]]
       .x <-
         if (! is.list(.x)){
           list(
@@ -140,25 +230,26 @@ user_input_dot_project_files <- function(path = here::here(),  dialogName = 'Def
       curr_q <- .x$question
       curr_file <- file.path(path_coder, paste0('.', janitor::make_clean_names(curr_q), '.config'))
       
-      .x$default <-
-        if (file.exists(curr_file)){
-          readLines(curr_file) |> paste0(collapse = '\n')
-        }else if ( 'default' %in% names(.x) ){
-          .x$default
-        }else {'default'}
+      
+      .x$default <- read_vibe_coder_config_file(curr_file, default = .x$default)
       .x
     })
   
   if (!dir.exists(path_coder)) {
     dir.create(path_coder, recursive = TRUE)
   }
-  responses <- user_input(questions = all_questions2,dialogName = dialogName, width = 800)
+  
+
+  
+  responses <- user_input(questions = questions2,dialogName = dialogName, width = 800)
+  
+  
   responses |>
     purrr::iwalk(~{
-      print(.y)
-      if (nchar(.x) > 0 ){
-        writeLines(.x, file.path(path_coder, paste0('.', .y, '.config')))
-      }
+      # .x <- responses[[7]]
+      # .y = names(responses)[[7]]
+      file_name = file.path(path_coder, paste0('.', .y, '.config'))
+      write_vibe_coder_config_file(file_name = file_name, values = as.character(.x))
     })
   
   invisible(responses)

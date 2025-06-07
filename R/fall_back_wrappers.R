@@ -11,6 +11,7 @@
 #' @return A logical value: TRUE if RStudio API is available and usable, FALSE otherwise.
 #' @examples
 #' has_rstudio_api()
+#' @export 
 has_rstudio_api <- function(){
   answer <- requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()
   if ( ! answer){
@@ -66,6 +67,7 @@ active_document_context <- function() {
 #' if (!is.null(loc)) {
 #'   cat("Cursor is at row", loc[[1]], "and column", loc[[2]], "\n")
 #' }
+#' @export
 cursor_location <- function() {
   if ( ! has_rstudio_api()) {
     # Fallback: no cursor info available
@@ -79,9 +81,6 @@ cursor_location <- function() {
   }
 
 }
-
-
-
 
 
 
@@ -104,18 +103,20 @@ cursor_location <- function() {
 #' print(selected_text)
 #' }
 #'
-#' @noRd
-cursor_selection <- function() {
+#' @export
+cursor_selection <- function(context = NULL) {
   if ( ! has_rstudio_api()) {
     # Fallback: no cursor info available
     return("")
   }
-
-  context <- active_document_context()
+  context <- 
+    if (is.null(context))(
+      active_document_context()
+    )else{context}
 
   if (length(context$selection) > 0) {
     context$selection[[1]]$text
-  }
+  }else{""}
 }
 
 
@@ -133,17 +134,63 @@ cursor_selection <- function() {
 #' @param text A character string to insert or print.
 #' @return Invisibly returns TRUE if text was inserted via RStudio API,
 #'         or FALSE if it was printed to the console.
-insert_Text <- function(text) {
+#' @export         
+insert_text <- function(text, location = NULL, context = NULL) {
   if ( ! has_rstudio_api()) {
     # Fallback: no cursor info available
     cat(text, "\n")
-    return(invisible(FALSE))
+    return( invisible(text) )
   }
-  # Insert text at current selection
-  rstudioapi::insertText(text = text)
-  invisible(TRUE)
+  
+  
+  location <- 
+    if ( is.null(location)  ){
+      if ( ! is.null(context)  ){
+        rstudioapi::document_position(context$selection[[1]]$range$start["row"], 1)
+      }else{
+        # Insert text at current selection
+        rstudioapi::insertText(text = text)
+        return (invisible(text))
+      }
+    }
+
+
+    # insert at the given context
+    rstudioapi::insertText(
+      location = location,
+      text = paste(text, collapse = "\n")
+    )
+    return (invisible(text))
 }
 
+
+  
+#' Get Text Input from User
+#'
+#' Prompts the user for text input, using RStudio's prompt if available, otherwise falling back to base R's `readline`.
+#' @description Obtains text input from the user.
+#' @details This function attempts to use the `rstudioapi` package to display a modal prompt for user input if running within RStudio. If `rstudioapi` is not available or not running within RStudio, it falls back to using the base R `readline` function. This ensures cross-platform compatibility and a consistent user experience.  The function prioritizes using `rstudioapi` because it provides a more user-friendly modal dialog for input, preventing the console from being cluttered with input prompts.  When using `readline`, a space is appended to the prompt for better readability.
+#'
+#' @param prompt character. The message displayed to the user as a prompt. Defaults to "Enter input:".
+#' @param title character. The title of the input dialog (only applicable when using `rstudioapi`). Defaults to "Input".
+#'
+#' @return character. The text entered by the user.
+#' @examples
+#' \dontrun{
+#' # Example 1: Using the default prompt and title
+#' user_input <- text_input()
+#' print(paste("You entered:", user_input))
+#'
+#' # Example 2: Specifying a custom prompt
+#' name <- text_input(prompt = "Please enter your name:")
+#' print(paste("Hello,", name, "!"))
+#'
+#' # Example 3: Specifying a custom prompt and title (RStudio only)
+#' answer <- text_input(prompt = "What is the capital of France?", title = "Geography Quiz")
+#' print(paste("Your answer:", answer))
+#' }
+#' @export
+#' @author Placeholder
 text_input <- function(prompt = "Enter input:", title = "Input") {
   if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
     ans <- rstudioapi::showPrompt(title = title, message = prompt)
@@ -171,6 +218,60 @@ text_input <- function(prompt = "Enter input:", title = "Input") {
 
 
 
+
+
+
+#' Get User Selection Safely with Fallbacks
+#'
+#' This function prompts the user to select an option from a list of choices,
+#' providing a safe and consistent experience across different R environments,
+#' including RStudio and base R. It leverages `rstudioapi` when available for
+#' a more integrated experience, and falls back to base R methods when not.
+#'
+#' @description Safely prompts the user to select an option from a list of choices.
+#'
+#' @details
+#' This function first checks if the `rstudioapi` package is available and if the
+#' RStudio API is active. If so, it attempts to use RStudio's native prompting
+#' capabilities.  For binary (Yes/No) choices, it uses `rstudioapi::showQuestion`.
+#' For multiple choices, it constructs a numbered list and prompts the user to
+#' enter the corresponding number. If `rstudioapi` is not available, it falls back
+#' to the base R `menu()` function.  The function handles cases where the user
+#' cancels the selection or enters invalid input by returning `NULL`.
+#'
+#' @param prompt A character string specifying the prompt message to display to the user.
+#' @param choices A character vector containing the options to present to the user.
+#'
+#' @return A character string representing the user's selected option, or `NULL` if the user cancels the selection or enters invalid input.
+#'
+#' @examples
+#' \dontrun{
+#' # Example 1: Simple Yes/No selection
+#' answer <- safe_get_selection_input(prompt = "Do you want to proceed?", choices = c("Yes", "No"))
+#' if (!is.null(answer)) {
+#'   print(paste("You selected:", answer))
+#' } else {
+#'   print("Selection cancelled.")
+#' }
+#'
+#' # Example 2: Multiple choice selection
+#' fruit <- safe_get_selection_input(prompt = "Choose your favorite fruit:", choices = c("Apple", "Banana", "Orange"))
+#' if (!is.null(fruit)) {
+#'   print(paste("Your favorite fruit is:", fruit))
+#' } else {
+#'   print("Selection cancelled.")
+#' }
+#'
+#' # Example 3: Using default values
+#' proceed <- safe_get_selection_input("Proceed?")
+#' if (!is.null(proceed)) {
+#'   print(paste("You selected:", proceed))
+#' } else {
+#'   print("Selection cancelled.")
+#' }
+#' }
+#' @export
+#' @author Placeholder
 safe_get_selection_input <- function(prompt = "Select an option:", choices = c("Yes", "No")) {
   if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
     # rstudioapi does not have true selection prompt
