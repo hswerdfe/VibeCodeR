@@ -11,3 +11,21 @@ RoxygenNote: 7.3.2
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Imports: 
+    diffobj,
+    ellmer,
+    glue,
+    here,
+    htmltools,
+    janitor,
+    magrittr,
+    miniUI,
+    purrr,
+    rstudioapi,
+    shiny,
+    shinyWidgets,
+    snakecase,
+    sodium,
+    stringr,
+    tibble,
+    utils

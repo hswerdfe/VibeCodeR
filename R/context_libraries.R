@@ -1,8 +1,6 @@
 
 
 
-library(magrittr)
-library(stringr)
 
 
 #' List Installed R Packages
@@ -26,8 +24,6 @@ library(stringr)
 #'   print("dplyr is not installed")
 #' }
 #' }
-#' @export
-#' @author Placeholder
 libraries_installed <- function(){
   base::library()$results[,1]  
 }
@@ -59,8 +55,6 @@ libraries_installed <- function(){
 #'   print("dplyr is not loaded.")
 #' }
 #' }
-#' @export
-#' @author Placeholder
 libraries_in_memmory <- function(package_prefix = "^package:"){
   base::search() |>
     stringr::str_subset(package_prefix) |>
@@ -111,18 +105,16 @@ libraries_in_memmory <- function(package_prefix = "^package:"){
 #' libraries_extract(code3)
 #' # Returns: character(0)
 #' }
-#' @export
-#' @author Placeholder
 libraries_extract <- function(code_string) {
   # Remove comments
   
   code_clean <- 
     code_string |>
     stringr::str_split('\n') |>
-    unlist() |>
+    base::unlist() |>
     stringr::str_remove_all("#.*$") |>
     purrr::keep(~{nchar(.x) > 0}) |>
-    paste0(collapse = '\n')
+    base::paste0(collapse = '\n')
   
 
   
@@ -137,14 +129,14 @@ libraries_extract <- function(code_string) {
   packages <- c()
   
   for (pattern in patterns) {
-    matches <- regmatches(code_clean, gregexpr(pattern, code_clean, perl = TRUE))[[1]]
+    matches <- base::regmatches(code_clean, base::gregexpr(pattern, code_clean, perl = TRUE))[[1]]
     if (length(matches) > 0) {
-      if (grepl("::", pattern)) {
+      if (base::grepl("::", pattern)) {
         # Extract package names from package::function
-        pkg_names <- gsub("([a-zA-Z0-9._]+)::.*", "\\1", matches)
+        pkg_names <- base::gsub("([a-zA-Z0-9._]+)::.*", "\\1", matches)
       } else {
         # Extract from library/require calls
-        pkg_names <- gsub(pattern, "\\2", matches, perl = TRUE)
+        pkg_names <- base::gsub(pattern, "\\2", matches, perl = TRUE)
       }
       packages <- c(packages, pkg_names)
     }
@@ -178,14 +170,12 @@ libraries_extract <- function(code_string) {
 #' # Clean up the dummy file
 #' file.remove("temp.R")
 #' }
-#' @export
-#' @author Placeholder
 libraries_extract_file <- function(file_name){
   #file_name <- "C:/Users/swerdfeh/projects/VibeCodeR/R/context_libraries.R"
   code_string <- 
     file_name |>
-    readLines() |>
-    paste0(collapse = '\n') 
+    base::readLines() |>
+    base::paste0(collapse = '\n') 
   
   code_string |>
     libraries_extract()
@@ -214,23 +204,21 @@ libraries_extract_file <- function(file_name){
 #' libraries <- libraries_extract_files(dir = "path/to/my/R/files", pattern = "\\.r$")
 #' print(libraries)
 #' }
-#' @export
-#' @author Placeholder
 libraries_extract_files <- function(
     dir =   here::here() |> file.path('R'),
     pattern = "\\.R$"
 ){
   
   dir |> 
-  list.files(recursive = TRUE, 
+    base::list.files(recursive = TRUE, 
              full.names = TRUE,
              pattern = pattern
   ) |>
     purrr::map(~{
       libraries_extract_file(.x)
     }) |>
-    unlist() |>
-    unique()
+    base::unlist() |>
+    base::unique()
 }
 
 
@@ -264,8 +252,6 @@ libraries_extract_files <- function(
 #'   print("The 'mean' function is not in memory.")
 #' }
 #' }
-#' @export
-#' @author Placeholder
 functions_in_memory <- function(.env = .GlobalEnv){
   base::ls(envir = .env) |>
     purrr::set_names() |>
@@ -322,21 +308,19 @@ functions_in_memory <- function(.env = .GlobalEnv){
 #'   print("dplyr::mutate is not loaded")
 #' }
 #' }
-#' @export
-#' @author Placeholder
 functions_libraries_in_memmory <- function(){
   search() |> 
     stringr::str_subset('^package:') |>
     stringr::str_subset('^package:base$', negate = TRUE) |>
     purrr::map(\(env_name){
       env_objects <- ls(env_name)
-      functions_in_env <- env_objects[sapply(env_objects, function(x) {
-        tryCatch(is.function(get(x, envir = as.environment(env_name))), 
+      functions_in_env <- env_objects[base::sapply(env_objects, function(x) {
+        tryCatch(base::is.function(base::get(x, envir = base::as.environment(env_name))), 
                  error = function(e) FALSE)
       })]
-      paste0(stringr::str_remove(env_name, '^package:'), '::', functions_in_env)
-    }) |> unlist() |> 
-    unique()
+      base::paste0(stringr::str_remove(env_name, '^package:'), '::', functions_in_env)
+    }) |> base::unlist() |> 
+    base::unique()
 }
 
 

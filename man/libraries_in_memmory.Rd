@@ -34,6 +34,3 @@ if ("dplyr" \%in\% libraries_in_memmory()) {
 }
 }
 }
-\author{
-Placeholder
-}

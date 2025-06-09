@@ -1,9 +1,9 @@
 
-library(shiny)
-library(miniUI)
-library(shinyWidgets)
-library(janitor)
-library(here)
+# library(shiny)
+# library(miniUI)
+# library(shinyWidgets)
+# library(janitor)
+# library(here)
 
 
 
@@ -48,7 +48,6 @@ library(here)
 #'
 #' @import shiny
 #' @import miniUI
-#' @export
 user_input <- function(questions, dialogName = "Questions", width = 800, height = 500) {
   if (!is.list(questions) || length(questions) == 0) {
     stop("questions must be a non-empty list")
@@ -61,7 +60,7 @@ user_input <- function(questions, dialogName = "Questions", width = 800, height 
     input_id <- paste0("q", i)
 
     if (is.character(q)) {
-      ui_elements[[i]] <- textInput(input_id, label = q, width = "100%")
+      ui_elements[[i]] <- shiny::textInput(input_id, label = q, width = "100%")
     } else if (is.list(q)) {
       if (is.null(q$question)) {
         stop(paste("Question", i, "must have a 'question' field"))
@@ -70,7 +69,7 @@ user_input <- function(questions, dialogName = "Questions", width = 800, height 
       default <- q$default
 
       if (!is.null(q$type) && q$type == "logical") {
-        ui_elements[[i]] <- checkboxInput(input_id, label = q$question, value = if (!is.null(default)) as.logical(default) else FALSE)
+        ui_elements[[i]] <- shiny::checkboxInput(input_id, label = q$question, value = if (!is.null(default)) as.logical(default) else FALSE)
       } else if (!is.null(q$type) && q$type == "numericRange") {
         if (is.null(q$range) || length(q$range) != 2 || !is.numeric(q$range)) {
           stop(paste("Question", i, "with type 'numericRange' must have a numeric 'range' of length 2"))
@@ -78,27 +77,27 @@ user_input <- function(questions, dialogName = "Questions", width = 800, height 
 
         slider_value <- if (!is.null(default)) default else mean(q$range)
 
-        ui_elements[[i]] <- sliderInput(input_id,
+        ui_elements[[i]] <- shiny::sliderInput(input_id,
                                         label = q$question,
                                         min = q$range[1],
                                         max = q$range[2],
                                         value = slider_value,
                                         width = "100%")
       } else if (!is.null(q$type) && q$type == "textarea") {
-        ui_elements[[i]] <- textAreaInput(input_id,
+        ui_elements[[i]] <- shiny::textAreaInput(input_id,
                                           label = q$question,
                                           value = if (!is.null(default)) default else "",
                                           rows = ifelse(!is.null(q$rows), q$rows, 5),
                                           resize = "vertical",
                                           width = "100%")
       } else if (!is.null(q$choices)) {
-        ui_elements[[i]] <- selectInput(input_id,
+        ui_elements[[i]] <- shiny::selectInput(input_id,
                                         label = q$question,
                                         choices = q$choices,
                                         selected = if (!is.null(default)) default else NULL,
                                         width = "100%")
       } else {
-        ui_elements[[i]] <- textInput(input_id,
+        ui_elements[[i]] <- shiny::textInput(input_id,
                                       label = q$question,
                                       value = if (!is.null(default)) default else "",
                                       width = "100%")
@@ -107,37 +106,35 @@ user_input <- function(questions, dialogName = "Questions", width = 800, height 
       stop(paste("Question", i, "must be a character string or list"))
     }
   }
-
-  ui <- fluidPage(
-    tags$head(
-      tags$style(HTML("
+  ui <- shiny::fluidPage(
+    shiny::tags$head(
+      shiny::tags$style(shiny::HTML("
         body, label, input, select, button, textarea { font-size: 12px; }
         .shiny-input-container { margin-bottom: 10px; }
       "))
     ),
-    do.call(tagList, ui_elements),
-    actionButton("done", "Done", class = "btn-primary")
+    base::do.call(shiny::tagList, ui_elements),
+    shiny::actionButton("done", "Done", class = "btn-primary")
   )
 
   server <- function(input, output, session) {
-    observeEvent(input$done, {
+    shiny::observeEvent(input$done, {
       answers <- list()
-      for (i in seq_along(questions)) {
-        input_id <- paste0("q", i)
+      for (i in base::seq_along(questions)) {
+        input_id <- base::paste0("q", i)
         answers[[i]] <- input[[input_id]]
         q <- questions[[i]]
         #names(answers)[i] <- if (is.character(q)) q else q$question
         names(answers)[i] <- if (is.character(q)) janitor::make_clean_names(q) else janitor::make_clean_names(q$question)
       }
-      stopApp(answers)
+      shiny::stopApp(answers)
     })
   }
-  print('before runGadget')
   ret_val <- shiny::runGadget(ui, server, 
                               #viewer = shiny::dialogViewer(dialogName = dialogName, width = width, height = height), 
                               stopOnCancel = TRUE
               )
-  print('after runGadget')
+
   ret_val
 }
 

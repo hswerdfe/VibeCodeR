@@ -12,10 +12,10 @@ show_diff_gadget(
 )
 }
 \arguments{
-\item{original}{A character string representing the original text.  Newlines (`\n`)
+\item{original}{A character string representing the original text.  Newlines (`\\n`)
 are used to separate lines.}
 
-\item{refactored}{A character string representing the refactored text. Newlines (`\n`)
+\item{refactored}{A character string representing the refactored text. Newlines (`\\n`)
 are used to separate lines.}
 
 \item{dialog_title}{A character string specifying the title of the gadget's dialog window.
@@ -48,8 +48,8 @@ refactored (inserted) content and yellow for original (deleted) content.
 }
 \examples{
 \dontrun{
-original_text <- "This is the original text.\nIt has some lines.\nAnd some more."
-refactored_text <- "This is the refactored text.\nIt has some modified lines.\nAnd even more!"
+original_text <- "This is the original text.\\\\nIt has some lines.\\\\nAnd some more."
+refactored_text <- "This is the refactored text.\\\\nIt has some modified lines.\\\\nAnd even more!"
 
 choice <- show_diff_gadget(original_text, refactored_text, 
                           dialog_title = "Review Changes",
@@ -57,13 +57,10 @@ choice <- show_diff_gadget(original_text, refactored_text,
 print(paste("User chose:", choice))
 
 # Example with shorter strings
-original <- "Line 1\nLine 2\nLine 3"
-refactored <- "Line 1\nLine 2 modified\nLine 3"
+original <- "Line 1\\\\nLine 2\\\\nLine 3"
+refactored <- "Line 1\\\\nLine 2 modified\\\\nLine 3"
 
 choice2 <- show_diff_gadget(original, refactored)
 print(paste("User chose:", choice2))
 }
-}
-\author{
-Placeholder
 }

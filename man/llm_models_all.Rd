@@ -23,6 +23,3 @@ This function identifies services models by listing objects within the 'ellmer' 
 llm_models_all()
 }
 }
-\author{
-Placeholder
-}

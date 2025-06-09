@@ -33,6 +33,3 @@ if ("dplyr" \%in\% installed_packages) {
 }
 }
 }
-\author{
-Placeholder
-}

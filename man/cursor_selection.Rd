@@ -25,5 +25,4 @@ Works only within the RStudio environment and requires the
 selected_text <- cursor_selection()
 print(selected_text)
 }
-
 }

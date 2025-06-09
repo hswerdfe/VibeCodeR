@@ -13,7 +13,6 @@
 #' @param function_name 
 #'
 #' @returns the string returned from the LLM
-#' @export
 generate_function_from_specs <- function(specs, function_name = ''){
   #specs = 'make some Noise'
   prompt <- 

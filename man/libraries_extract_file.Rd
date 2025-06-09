@@ -33,6 +33,3 @@ print(libraries)
 file.remove("temp.R")
 }
 }
-\author{
-Placeholder
-}

@@ -15,7 +15,6 @@
 #' # surrounding the cursor position, or the selected code if something is highlighted.
 #'
 #' @keywords internal
-#' @export
 function_code <- function(context){
 
   selection <- context$selection[[1]]$text
@@ -78,17 +77,16 @@ function_code <- function(context){
 #'   extract_function_name(".myFunc = function() {}")
 #'   extract_function_name("f <<- function(...) NULL")
 #'   extract_function_name("foo <- function(x) x + 1")
-#' @export
 extract_function_name <- function(func_code) {
   # Extract function name
   func_pattern <- "\\b([a-zA-Z.][a-zA-Z0-9._]*)\\s*([<]{1,2}-|=)\\s*function\\b"
-  match <- regexec(func_pattern, func_code)
+  match <- base::regexec(func_pattern, func_code)
 
   if (match[[1]][1] == -1) {
     return("function")
   }
 
-  matches <- regmatches(func_code, match)[[1]]
+  matches <- base::regmatches(func_code, match)[[1]]
   return(matches[2])
 }
 

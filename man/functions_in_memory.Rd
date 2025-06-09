@@ -39,6 +39,3 @@ if ("mean" \%in\% functions_in_memory()) {
 }
 }
 }
-\author{
-Placeholder
-}

@@ -1,11 +1,11 @@
 
-#library(httr2)
-library(janitor)
-library(snakecase)
-library(stringr)
-library(glue)
-library(ellmer)
-library(magrittr)
+# library(httr2)
+# library(janitor)
+# library(snakecase)
+# library(stringr)
+# library(glue)
+# library(ellmer)
+# library(magrittr)
 
 
 
@@ -25,16 +25,14 @@ library(magrittr)
 #' # List available chat services
 #' llm_services()
 #' }
-#' @export
-#' @author Placeholder
 llm_services <- function(){
   pkg = "ellmer"
   pattern = "^chat_"
   if (!requireNamespace(pkg, quietly = TRUE)) {
-    stop(sprintf("Package '%s' is not installed.", pkg))
+    base::stop(base::sprintf("Package '%s' is not installed.", pkg))
   }
   
-  getNamespaceExports(pkg) |>
+  base::getNamespaceExports(pkg) |>
     stringr::str_subset(pattern = pattern) |>
     stringr::str_remove(pattern) |>
     stringr::str_replace_all('_', ' ') |>
@@ -58,6 +56,7 @@ llm_services <- function(){
 #'   - Ensure that a service-specific function (e.g., `models_google_gemini`) exists and is accessible in the environment.
 #'   - The service-specific function should return a data structure with an "id" column representing the model IDs.
 #' @return A character vector containing the IDs of the available LLM models for the specified service.
+#' @importFrom magrittr %>%
 #' @examples
 #' \dontrun{
 #' # Assuming a function 'models_google_gemini' exists that returns a data frame
@@ -75,8 +74,6 @@ llm_services <- function(){
 #' # Example with a different service (assuming 'models_openai' exists):
 #' # llm_models("OpenAI")
 #' }
-#' @export
-#' @author Placeholder
 llm_models <- function(service){
   #service = 'Google Gemini'
   #service = "Huggingface"
@@ -87,10 +84,11 @@ llm_models <- function(service){
     base::paste0('models_', .)
   
   models_func <- 
-    tryCatch(
-      models_function_name |> base::get()  ,
+    base::tryCatch(
+      models_function_name |> 
+        base::get()  ,
       error = \(e){
-        warning(glue('Error getting function `{models_function_name}``, ie no models for service `{service}`'))
+        warning(glue::glue('Error getting function `{models_function_name}``, ie no models for service `{service}`'))
         \()(tibble::tibble(id = character  ())  )
       }
     )
@@ -115,13 +113,11 @@ llm_models <- function(service){
 #' # List all available language models
 #' llm_models_all()
 #' }
-#' @export
-#' @author Placeholder
 llm_models_all <- function(){
   pkg = "ellmer"
   pattern = "^models_"
   if (!requireNamespace(pkg, quietly = TRUE)) {
-    stop(sprintf("Package '%s' is not installed.", pkg))
+    base::stop(base::sprintf("Package '%s' is not installed.", pkg))
   }
   
   getNamespaceExports(pkg) |>
@@ -139,22 +135,20 @@ llm_models_all <- function(){
 
 
 #' Default LLM object
-#' @export
-#' @author Placeholder
 llm_default <- function(...){
   # TODO : hook upto config file
   pkg <- 'ellmer'
   pattern = '^chat_'
-  paste0(
+  base::paste0(
     pkg, '::',
-    getNamespaceExports(pkg) |>
+    base::getNamespaceExports(pkg) |>
       stringr::str_subset(pattern = pattern) 
   )
   
   
   
   function_name <- 
-    paste0('chat_', 
+    base::paste0('chat_', 
       read_vibe_coder_config('.default_llm_service.config') |>
         snakecase::to_snake_case()
     ) 
@@ -162,7 +156,7 @@ llm_default <- function(...){
   
   
   
-  func <- utils::getFromNamespace("chat_google_gemini", pkg)
+  func <- utils::getFromNamespace(function_name, pkg)
   func(...)
 }
 

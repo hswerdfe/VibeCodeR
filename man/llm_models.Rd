@@ -45,6 +45,3 @@ llm_models("Huggingface")
 # llm_models("OpenAI")
 }
 }
-\author{
-Placeholder
-}

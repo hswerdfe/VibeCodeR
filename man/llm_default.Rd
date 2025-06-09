@@ -9,6 +9,3 @@ llm_default(...)
 \description{
 Default LLM object
 }
-\author{
-Placeholder
-}

@@ -11,7 +11,6 @@
 #' @return A logical value: TRUE if RStudio API is available and usable, FALSE otherwise.
 #' @examples
 #' has_rstudio_api()
-#' @export 
 has_rstudio_api <- function(){
   answer <- requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()
   if ( ! answer){
@@ -39,7 +38,6 @@ has_rstudio_api <- function(){
 #' }
 #'
 #' @keywords rstudio document context
-#' @export
 active_document_context <- function() {
   if ( ! has_rstudio_api()) {
     return(list(
@@ -67,7 +65,6 @@ active_document_context <- function() {
 #' if (!is.null(loc)) {
 #'   cat("Cursor is at row", loc[[1]], "and column", loc[[2]], "\n")
 #' }
-#' @export
 cursor_location <- function() {
   if ( ! has_rstudio_api()) {
     # Fallback: no cursor info available
@@ -102,8 +99,6 @@ cursor_location <- function() {
 #' selected_text <- cursor_selection()
 #' print(selected_text)
 #' }
-#'
-#' @export
 cursor_selection <- function(context = NULL) {
   if ( ! has_rstudio_api()) {
     # Fallback: no cursor info available
@@ -134,7 +129,6 @@ cursor_selection <- function(context = NULL) {
 #' @param text A character string to insert or print.
 #' @return Invisibly returns TRUE if text was inserted via RStudio API,
 #'         or FALSE if it was printed to the console.
-#' @export         
 insert_text <- function(text, 
                         location = NULL, 
                         context = NULL) {
@@ -192,10 +186,8 @@ insert_text <- function(text,
 #' answer <- text_input(prompt = "What is the capital of France?", title = "Geography Quiz")
 #' print(paste("Your answer:", answer))
 #' }
-#' @export
-#' @author Placeholder
 text_input <- function(prompt = "Enter input:", title = "Input") {
-  if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
+  if (base::requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
     ans <- rstudioapi::showPrompt(title = title, message = prompt)
     return(ans)
   }
@@ -273,10 +265,8 @@ text_input <- function(prompt = "Enter input:", title = "Input") {
 #'   print("Selection cancelled.")
 #' }
 #' }
-#' @export
-#' @author Placeholder
 safe_get_selection_input <- function(prompt = "Select an option:", choices = c("Yes", "No")) {
-  if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
+  if (base::requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
     # rstudioapi does not have true selection prompt
     # We'll use showQuestion for two choices if relevant
     # Otherwise, simulate with showPrompt or fall back

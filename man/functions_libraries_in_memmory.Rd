@@ -51,6 +51,3 @@ if ("dplyr::mutate" \%in\% loaded_functions) {
 }
 }
 }
-\author{
-Placeholder
-}

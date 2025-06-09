@@ -36,6 +36,3 @@ libraries <- libraries_extract_files(dir = "path/to/my/R/files", pattern = "\\\\
 print(libraries)
 }
 }
-\author{
-Placeholder
-}

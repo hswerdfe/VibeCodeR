@@ -9,7 +9,7 @@
 #' @param prefixes A character vector or single string to prepend before the rules (default: 'Follow these rules').
 #' @param postfixes A character vector or single string to append after the rules (default: 'R code below:').
 #' @param list_item A string used to prefix each rule item (default: ' - ').
-#' @param collapse_char Collapse the different lines together (default : '\n').a
+#' @param collapse_char Collapse the different lines together (default : '\\n').
 #'
 #' @return A single character string containing the formatted prompt.
 #' 
@@ -19,8 +19,6 @@
 #'   prefixes = "Please follow these coding rules:",
 #'   postfixes = "Here is the R code:"
 #' )
-#'
-#' @export
 generate_pre_prompt <- function(
     vector_rules,
     prefixes = 'Follow these rules',
@@ -122,8 +120,8 @@ user_input_dot_project_files <- function(
       "Document ALL parameters with @param, including their types and detailed descriptions",
       "Add @return with specific return type and description",
       "Create realistic @examples with actual working R code (use \\\\dontrun{} wrapper)",
-      "Add @export tag",
-      "Add @author with placeholder",
+      #"Add @export tag",
+      #"Add @author with placeholder",
       "Use this exact format and return ONLY the roxygen documentation:",
       "R Function Code:") |>
     generate_pre_prompt(prefixes = c("Generate complete roxygen2 documentation for this R function. ",

@@ -1,7 +1,7 @@
 
 
 
-library(sodium)
+#library(sodium)
 
 
 secret_key <- function(
@@ -14,7 +14,7 @@ secret_key <- function(
       writeBin(key, key_file)
       #Sys.chmod(key_file, mode = "600")  # Ensure only the user can read/write
     } else {
-      key <- readBin(key_file, what = raw(), n = 32)
+      key <- base::readBin(key_file, what = raw(), n = 32)
     }
     
     key
@@ -34,7 +34,7 @@ write_secret_file <- function(
   ciphertext <- sodium::data_encrypt(charToRaw(secret_text), key, nonce)
   
   # Step 3: Save nonce and ciphertext to a file
-  saveRDS(list(nonce = nonce, ciphertext = ciphertext), file_name)
+  base::saveRDS(list(nonce = nonce, ciphertext = ciphertext), file_name)
 }
 
 read_secret_file <- function(
@@ -43,7 +43,7 @@ read_secret_file <- function(
     key = secret_key(...)
   ){
   
-  encrypted_data <- readRDS(file = file_name)
+  encrypted_data <- base::readRDS(file = file_name)
 
 
   sodium::data_decrypt(
@@ -51,7 +51,7 @@ read_secret_file <- function(
       key = secret_key(), 
       nonce = encrypted_data$nonce
   ) |> 
-  rawToChar()
+    base::rawToChar()
 }
 
 

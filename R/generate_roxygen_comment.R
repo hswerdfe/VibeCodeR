@@ -5,8 +5,6 @@
 #' @param ... 
 #'
 #' @returns the string returned from the LLM
-#' @export
-#'
 generate_roxygen_comment_from_code <- function(
     func_code, 
     ...

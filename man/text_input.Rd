@@ -37,6 +37,3 @@ answer <- text_input(prompt = "What is the capital of France?", title = "Geograp
 print(paste("Your answer:", answer))
 }
 }
-\author{
-Placeholder
-}

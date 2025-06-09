@@ -1,9 +1,9 @@
 
-library(shiny)
-library(miniUI)
-library(rstudioapi)
-library(diffobj)
-library(htmltools)
+# library(shiny)
+# library(miniUI)
+# library(rstudioapi)
+# library(diffobj)
+# library(htmltools)
 
 
 #' Display a Diff Gadget for Comparing Text Changes
@@ -23,9 +23,9 @@ library(htmltools)
 #' The custom CSS styles override the default `diffobj` colors to use light green for
 #' refactored (inserted) content and yellow for original (deleted) content.
 #'
-#' @param original A character string representing the original text.  Newlines (`\n`)
+#' @param original A character string representing the original text.  Newlines (`\\n`)
 #'   are used to separate lines.
-#' @param refactored A character string representing the refactored text. Newlines (`\n`)
+#' @param refactored A character string representing the refactored text. Newlines (`\\n`)
 #'   are used to separate lines.
 #' @param dialog_title A character string specifying the title of the gadget's dialog window.
 #'   Defaults to "🤖 Do you accept the changes? 🤔!".
@@ -37,8 +37,8 @@ library(htmltools)
 #'
 #' @examples
 #' \dontrun{
-#' original_text <- "This is the original text.\nIt has some lines.\nAnd some more."
-#' refactored_text <- "This is the refactored text.\nIt has some modified lines.\nAnd even more!"
+#' original_text <- "This is the original text.\\nIt has some lines.\\nAnd some more."
+#' refactored_text <- "This is the refactored text.\\nIt has some modified lines.\\nAnd even more!"
 #'
 #' choice <- show_diff_gadget(original_text, refactored_text, 
 #'                           dialog_title = "Review Changes",
@@ -46,31 +46,31 @@ library(htmltools)
 #' print(paste("User chose:", choice))
 #'
 #' # Example with shorter strings
-#' original <- "Line 1\nLine 2\nLine 3"
-#' refactored <- "Line 1\nLine 2 modified\nLine 3"
+#' original <- "Line 1\\nLine 2\\nLine 3"
+#' refactored <- "Line 1\\nLine 2 modified\\nLine 3"
 #'
 #' choice2 <- show_diff_gadget(original, refactored)
 #' print(paste("User chose:", choice2))
 #' }
-#' @export
-#' @author Placeholder
 show_diff_gadget <- function(original, refactored,
                              dialog_title = "🤖 Do you accept the changes? 🤔!",
                              instructions_given = NULL) {
   
-  Original <- strsplit(original, "\n")[[1]] 
-  Refactored <- strsplit(refactored, "\n")[[1]]
+  Original <- base::strsplit(original, "\n")[[1]] 
+  Refactored <- base::strsplit(refactored, "\n")[[1]]
   
   diff_result <- diffobj::diffChr(
     Original, 
     Refactored
   )
   
-  ui <- miniUI::miniPage(
+  ui <- 
+    miniUI::miniPage(
     miniUI::miniTitleBar(dialog_title),
     # Add custom CSS styling
-    tags$head(
-      tags$style(HTML("
+    shiny::tags$head(
+      shiny::tags$style(
+        shiny::HTML("
         /* Override diffobj default colors - targeting the correct classes */
         DIV.diffobj-container.light.yb SPAN.diffobj-word.insert,
         DIV.diffobj-container.light.yb DIV.diffobj-line>DIV.insert {
@@ -161,46 +161,50 @@ show_diff_gadget <- function(original, refactored,
       "))
     ),
     miniUI::miniContentPanel(
-      htmlOutput("diff"),
+      shiny::htmlOutput("diff"),
       # Conditionally display instructions if provided
-      conditionalPanel(
+      shiny::conditionalPanel(
         condition = "output.show_instructions",
-        div(class = "instructions-container",
-            htmlOutput("instructions")
+        shiny::div(
+          class = "instructions-container",
+          shiny::htmlOutput("instructions")
         )
       ),
-      br(),
-      div(class = "button-container",
-          div(class = "button-left",
-              actionButton("keep", "❌ Keep Original", class = "btn btn-keep")
-          ),
-          div(class = "button-right",
-              actionButton("accept", "✅ Accept Refactored", class = "btn btn-accept")
-          )
+      shiny::br(),
+      shiny::div(
+        class = "button-container",
+        shiny::div(
+          class = "button-left",
+          shiny::actionButton("keep", "❌ Keep Original", class = "btn btn-keep")
+        ),
+        shiny::div(
+          class = "button-right",
+          shiny::actionButton("accept", "✅ Accept Refactored", class = "btn btn-accept")
+        )
       )
     )
   )
   
   server <- function(input, output, session) {
-    output$diff <- renderUI({
+    output$diff <- shiny::renderUI({
       shiny::HTML(as.character(diff_result))
     })
     
     # Render instructions if provided
-    output$instructions <- renderUI({
+    output$instructions <- shiny::renderUI({
       if (!is.null(instructions_given) && instructions_given != "") {
         shiny::HTML(paste0("<strong>Instructions:</strong> ", instructions_given))
       }
     })
     
     # Control visibility of instructions panel
-    output$show_instructions <- reactive({
+    output$show_instructions <- shiny::reactive({
       !is.null(instructions_given) && instructions_given != ""
     })
-    outputOptions(output, "show_instructions", suspendWhenHidden = FALSE)
+    shiny::outputOptions(output, "show_instructions", suspendWhenHidden = FALSE)
     
-    observeEvent(input$keep, stopApp("keep"))
-    observeEvent(input$accept, stopApp("accept"))
+    shiny::observeEvent(input$keep, stopApp("keep"))
+    shiny::observeEvent(input$accept, stopApp("accept"))
   }
   
   shiny::runGadget(ui, server)

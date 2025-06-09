@@ -26,6 +26,3 @@ This function retrieves a list of chat service functions within the 'ellmer' pac
 llm_services()
 }
 }
-\author{
-Placeholder
-}

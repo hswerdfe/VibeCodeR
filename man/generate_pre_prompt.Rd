@@ -21,7 +21,7 @@ generate_pre_prompt(
 
 \item{list_item}{A string used to prefix each rule item (default: ' - ').}
 
-\item{collapse_char}{Collapse the different lines together (default : '\n').a}
+\item{collapse_char}{Collapse the different lines together (default : '\\n').}
 }
 \value{
 A single character string containing the formatted prompt.
@@ -37,5 +37,4 @@ generate_pre_prompt(
   prefixes = "Please follow these coding rules:",
   postfixes = "Here is the R code:"
 )
-
 }

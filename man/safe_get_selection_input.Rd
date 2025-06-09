@@ -62,6 +62,3 @@ if (!is.null(proceed)) {
 }
 }
 }
-\author{
-Placeholder
-}

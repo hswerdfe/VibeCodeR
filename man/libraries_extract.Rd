@@ -53,6 +53,3 @@ libraries_extract(code3)
 # Returns: character(0)
 }
 }
-\author{
-Placeholder
-}
