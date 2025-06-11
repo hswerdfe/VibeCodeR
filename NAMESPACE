@@ -3,7 +3,7 @@
 export(create_vibe_project)
 export(generate_changes)
 export(generate_function)
-export(generate_roxygen_comment)
+export(generate_testthat)
 export(user_input_dot_project_files)
 import(miniUI)
 import(shiny)

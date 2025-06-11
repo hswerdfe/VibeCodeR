@@ -15,7 +15,7 @@ Lists all language models available in the 'ellmer' package.
 \details{
 Retrieves a list of all available services models within the 'ellmer' package.
 
-This function identifies services models by listing objects within the 'ellmer' package that match the pattern "models\_". It then removes the "models\_" prefix, replaces underscores with spaces, and converts the resulting strings to title case for improved readability. This provides a user-friendly listing of available models.
+This function identifies services models by listing objects within the 'ellmer' package that match the pattern models_ then if returns human readable names
 }
 \examples{
 \dontrun{

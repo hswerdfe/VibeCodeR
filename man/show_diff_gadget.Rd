@@ -53,7 +53,7 @@ refactored_text <- "This is the refactored text.\\\\nIt has some modified lines.
 
 choice <- show_diff_gadget(original_text, refactored_text, 
                           dialog_title = "Review Changes",
-                          instructions_given = "Please review the changes carefully before deciding.")
+                          instructions_given = "review the changes before deciding.")
 print(paste("User chose:", choice))
 
 # Example with shorter strings

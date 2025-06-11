@@ -60,7 +60,18 @@ generate_changes_from_code <- function(selected_code = NULL, instructions = NULL
 #' @export
 #' @author Placeholder
 generate_changes <- function(){
-  selected_code <- cursor_selection() 
+  context <- active_document_context()
+  selected_code <- cursor_selection(context) 
   response <- generate_changes_from_code(selected_code = selected_code)
-  insert_text(text = response)
+  if (is.null(response )){
+    return(response)
+  }
+  
+  replace_lines( 
+    start_line = context$selection[[1]]$range$start[[1]],
+    end_line = context$selection[[1]]$range$end[[1]],
+    context = context,
+    replacement = response,
+    ask = FALSE
+  )
 }

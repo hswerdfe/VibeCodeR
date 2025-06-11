@@ -5,10 +5,7 @@
 #'
 #' @param path Path where the project should be created
 #' @param project_name Name of the project
-#' @param project_goal Description of the project goal
 #' @param include_readme Whether to include README
-#' @param vibe_level The vibe level selected
-#' @param music_genre Preferred music genre
 #' @param ... Additional parameters from the template form
 #'
 #' @export
@@ -72,7 +69,7 @@ create_vibe_project <- function(
     welcome_content <- paste0(welcome_content, "#\n")
   }
 
-  welcome_content <- paste0(welcome_content, "\n\n# Start coding your vibe! 🎵\nprint('Welcome to VibeCodeR!')\n")
+  welcome_content <- paste0(welcome_content, "\n\n# Start coding your vibe! \U0001F3B5\nprint('Welcome to VibeCodeR!')\n")
 
   writeLines(welcome_content, file.path(path, "welcome.R"))
 
@@ -95,7 +92,7 @@ create_vibe_project <- function(
 
   default_results <- user_input_dot_project_files(path = path)
 
-  path_coder = path |> file.path('.VibeCodeR')
+  path_coder <- path |> file.path('.VibeCodeR')
   if (!dir.exists(path_coder)) {
     dir.create(path_coder, recursive = TRUE)
   }

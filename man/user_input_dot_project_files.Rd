@@ -14,6 +14,8 @@ user_input_dot_project_files(
 \item{path}{Character. Path to the root of the project (default is `here::here()`).}
 
 \item{dialogName}{Character. Title to be displayed on the user dialog box (default is `"Default values to use with this project"`).}
+
+\item{path_coder}{Character.path to the place where the dot files will be saved. Defaults to path |> file.path('.VibeCodeR')}
 }
 \value{
 (Invisibly) returns a named list of responses corresponding to the configuration fields.

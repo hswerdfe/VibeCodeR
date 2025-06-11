@@ -29,7 +29,7 @@ This package includes the following RStudio add-ins:
 - Sample skeleton files
 - Custom icons and resources
 
-This is ideal for testing out the functionality of a new project working with llms
+This template is ideal for testing new workflows involving large language models (LLMs).
 
 
 ## Installation
@@ -52,7 +52,7 @@ Once installed, open RStudio and navigate to:
 ```r
 Addins > [Select an add-in from the VibeCodeR package]
 ```
-or go to the pallet `CTRL + SHIFT + P`, and type `VibeCodeR` then select the action you would like.
+or use the Command Palette (`Ctrl + Shift + P`), and type `VibeCodeR` then select the action you would like.
 
 
 Follow the prompts in the add-in to insert templates or perform the desired action.
@@ -70,7 +70,7 @@ Follow the prompts in the add-in to insert templates or perform the desired acti
 
 This package depends on:
 
- * `diffobj`, `ellmer`, `glue`, `here`, `htmltools`, `janitor`, `magrittr`, `miniUI`, `purrr`, `rstudioapi`, `shiny`, `shinyWidgets`, `snakecase`, `sodium`, `stringr`, `tibble`, `utils` 
+ * `diffobj`, `ellmer`, `glue`, `here`,  `janitor`, `magrittr`, `miniUI`, `purrr`, `rstudioapi`, `shiny`,  `snakecase`, `sodium`, `stringr`, `tibble`, `utils` 
 
 These will be installed automatically if not already present.
 
@@ -110,6 +110,8 @@ Contributions are welcome! If you'd like to add features or fix bugs, please sub
 ## License
 
 This package is licensed under the MIT License. See LICENSE for details.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 ## Author
  Howard Swerdfeger

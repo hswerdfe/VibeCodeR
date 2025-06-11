@@ -6,9 +6,6 @@
 \usage{
 functions_libraries_in_memmory()
 }
-\arguments{
-\item{None}{}
-}
 \value{
 A character vector containing the names of functions loaded from attached packages, in the format "package::function".
 }

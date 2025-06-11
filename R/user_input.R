@@ -27,13 +27,14 @@
 #'   the questions or their labels. Returns `NULL` if the user cancels.
 #'
 #' @examples
+#' \dontrun{
 #' questions <- list(
 #'   "Enter your name:",
 #'   list(question = "Choose a color:", choices = c("Red", "Green", "Blue")),
 #'   list(question = "Comments?")
 #' )
 #' responses <- user_input(questions)
-#'
+#' 
 #'
 #' questions <- list(
 #'   "What's your name?",
@@ -44,7 +45,7 @@
 #' )
 #'
 #' responses <- user_input(questions)
-#'
+#'}
 #'
 #' @import shiny
 #' @import miniUI

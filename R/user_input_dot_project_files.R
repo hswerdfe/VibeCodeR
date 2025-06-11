@@ -14,11 +14,13 @@
 #' @return A single character string containing the formatted prompt.
 #' 
 #' @examples
+#' \dontrun{
 #' generate_pre_prompt(
 #'   vector_rules = c("Do not use external libraries", "Use vectorized operations"),
 #'   prefixes = "Please follow these coding rules:",
 #'   postfixes = "Here is the R code:"
 #' )
+#' }
 generate_pre_prompt <- function(
     vector_rules,
     prefixes = 'Follow these rules',
@@ -52,6 +54,7 @@ generate_pre_prompt <- function(
 #'
 #' @param path Character. Path to the root of the project (default is `here::here()`).
 #' @param dialogName Character. Title to be displayed on the user dialog box (default is `"Default values to use with this project"`).
+#' @param path_coder Character.path to the place where the dot files will be saved. Defaults to path |> file.path('.VibeCodeR')
 #'
 #' @return
 #' (Invisibly) returns a named list of responses corresponding to the configuration fields.
@@ -113,21 +116,40 @@ user_input_dot_project_files <- function(
   
   
   default_roxygen_prompt <-
-    c("Create a descriptive title based on the function name and purpose",
+    paste0(
+    c("Create a very percise title based on the function name and purpose",
       "Write a detailed description explaining what the function does",
       "Add @description with a brief one-line summary",
       "Add @details with implementation notes and usage patterns",
-      "Document ALL parameters with @param, including their types and detailed descriptions",
+      "Document ALL parameters with @param, including their types, defauls and a description. skip the @param if there are no parameters.",
       "Add @return with specific return type and description",
-      "Create realistic @examples with actual working R code (use \\\\dontrun{} wrapper)",
+      "Create realistic @examples with actual working R code (use \\\\dontrun{'{}'})",
+      "Only produce the requested roxygen2 comment without explaination or markdown ",
+      "your response will be placed directly into a file with a .{file_extension} extension, replacing the existing comment if any.",
+      "DO NOT produce R code or the R function Only produce the properly formated roxygen2 comment"
       #"Add @export tag",
-      #"Add @author with placeholder",
-      "Use this exact format and return ONLY the roxygen documentation:",
-      "R Function Code:") |>
+      #"Add @author with placeholder"
+      ) |>
     generate_pre_prompt(prefixes = c("Generate complete roxygen2 documentation for this R function. ",
                                      "Follow these requirements exactly:\n"),
-                        postfixes = "R Function Code:"
-    )
+                        postfixes = ""
+    ) , 
+    paste0(c("\nCurrent Roxygen Comment:",
+           "{function_comment}") , 
+            collapse = '\n'
+           ),
+    paste0(c("\n\nCurrent function Code:",
+             "{function_code}") , 
+           collapse = '\n'
+    ),
+    collapse = '\n'
+  )
+  
+  
+      
+      
+    
+  
   
   
   default_function_generation_prompt <-
@@ -146,17 +168,30 @@ user_input_dot_project_files <- function(
     )
   
   
-  default_test_that_prompt <- c(
+  default_test_that_prompt <- 
+    paste0(
+    c(
     "Cover normal usage, edge cases, and failure conditions",
     "Use `test_that()` and `expect_` functions appropriately",
-    "Provide at least 2–3 distinct tests",
+    "Provide at least 2-3 distinct tests",
     "Assume `library(testthat)` is loaded",
-    "Return only valid R code with no explanation or markdown"
+    "Return only valid R code with no explanation or markdown",
+    "your response will be placed directly into a file with a .{file_extension} extension, in the normal location for the thatthat library."
   ) |>
     generate_pre_prompt(prefixes = c("Generate unit tests for the following R code using the testthat framework.",
                                      "Follow best practices:"),
-                        postfixes = "R Code:"
-    )
+                        postfixes = ""
+    ),
+  paste0(c("\nCurrent Roxygen Comment:",
+           "{function_comment}") , 
+         collapse = '\n'
+  ),
+  paste0(c("\n\nCurrent function Code:",
+           "{function_code}") , 
+         collapse = '\n'
+  ),
+  collapse = '\n'
+  )
   
   
   
@@ -185,13 +220,13 @@ user_input_dot_project_files <- function(
   
 
   questions <- list(
-    list(question = "🥅 Project Goals?", type = "textarea", default = defualt_project_goals),
-    list(question = "🥻 Generic Project style guides?", type = "textarea", default = default_style_guidelines, rows = 10),
-    list(question = "📝 Generate Tests prompt?", type = "textarea", default = default_test_that_prompt, rows = 10),
-    list(question = "📝 Generate Roxygen prompt?", type = "textarea", default = default_roxygen_prompt, rows = 10),
-    list(question = "📝 Generate Function prompt?", type = "textarea", default = default_function_generation_prompt, rows = 10),
-    list(question = "🔧 Refactor Code Prompt?", type = "textarea", default = default_refactor_prompt, rows = 10),
-    list(question = '🤖 Default LLM service?', choices = service_choices),
+    list(question = "\U0001F945 Project Goals?", type = "textarea", default = defualt_project_goals),
+    list(question = "\U0001F97B Generic Project style guides?", type = "textarea", default = default_style_guidelines, rows = 10),
+    list(question = "\U0001F4DD Generate Tests prompt?", type = "textarea", default = default_test_that_prompt, rows = 10),
+    list(question = "\U0001F4DD Generate Roxygen prompt?", type = "textarea", default = default_roxygen_prompt, rows = 10),
+    list(question = "\U0001F4DD Generate Function prompt?", type = "textarea", default = default_function_generation_prompt, rows = 10),
+    list(question = "\U0001F527 Refactor Code Prompt?", type = "textarea", default = default_refactor_prompt, rows = 10),
+    list(question = '\U0001F916 Default LLM service?', choices = service_choices),
     list(question = 'Include Context Libraries in Memmory?',                        type = "logical", default = TRUE),
     list(question = 'Include Context Libraries Refrenced In Other Parts Of Code?',  type = "logical", default = TRUE),
     list(question = 'Include Context Currently Selected File?',                     type = "logical", default = TRUE),
@@ -246,7 +281,7 @@ user_input_dot_project_files <- function(
     purrr::iwalk(~{
       # .x <- responses[[7]]
       # .y = names(responses)[[7]]
-      file_name = file.path(path_coder, paste0('.', .y, '.config'))
+      file_name <- file.path(path_coder, paste0('.', .y, '.config'))
       write_vibe_coder_config_file(file_name = file_name, values = as.character(.x))
     })
   

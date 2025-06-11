@@ -2,18 +2,66 @@
 % Please edit documentation in R/generate_function.R
 \name{generate_function_from_specs}
 \alias{generate_function_from_specs}
-\title{generate_function_from_specs}
+\title{Generate Function from Specifications using LLM}
 \usage{
-generate_function_from_specs(specs, function_name = "")
+generate_function_from_specs(specs, function_name = "", context = NULL)
 }
 \arguments{
-\item{specs}{}
+\item{specs}{Character; Specifications for what the function should do.
+This should be a clear description of the desired function's
+functionality, arguments, and expected behavior.}
 
-\item{function_name}{}
+\item{function_name}{Character; The desired name for the generated function.
+If an empty string (the default), the LLM will name the function.
+Defaults to `''`.}
+
+\item{context}{list; An optional document context object providing additional
+information for the LLM, such as existing code in the current document.
+Defaults to `NULL`, in which case the active document context is used.}
 }
 \value{
-the string returned from the LLM
+Character; The string returned from the LLM, which should contain
+  the generated R function code.
 }
 \description{
-generate_function_from_specs
+Generates an R function as a string from a provided specification
+  using a Large Language Model (LLM).
+
+Generates a function from an LLM given a whiten specification for the function and an optional function name
+}
+\details{
+Generate Function from Specifications using LLM
+
+
+This function constructs a prompt including a generic project style guide,
+a function generation prompt, the user-supplied specifications, and
+optionally the desired function name. It then sends this prompt to an LLM
+via `llm_request()` and returns the LLM's response. The function uses
+`read_vibe_coder_config()` to retrieve configuration files. The `context`
+parameter allows for providing contextual information to the LLM.
+
+Note: This function relies on the `llm_request`, `read_vibe_coder_config`,
+and `active_document_context` functions, which are assumed to be defined
+elsewhere. The `.generic_project_style_guides.config` and
+`.generate_function_prompt.config` files are also required.
+}
+\examples{
+\dontrun{
+# Example 1: Generate a simple addition function
+specs <- "Take two numbers as input and return their sum"
+addition_function <- generate_function_from_specs(specs)
+cat(addition_function)
+
+# Example 2: Generate a function with a specified name
+specs <- "Calculate the mean of a numeric vector"
+function_name <- "calculate_mean"
+mean_function <- generate_function_from_specs(specs, function_name)
+cat(mean_function)
+
+# Example 3: Provide additional context (replace with actual context object)
+# context <- active_document_context()
+# specs <- "Update the data frame with new calculated columns"
+# updated_df_function <- generate_function_from_specs(specs, context = context)
+# cat(updated_df_function)
+}
 }

@@ -4,20 +4,20 @@
 \alias{libraries_in_memmory}
 \title{List Packages Loaded in Memory}
 \usage{
-libraries_in_memmory(package_prefix = "^package:")
+libraries_in_memmory(package_regex = "^package:")
 }
 \arguments{
-\item{package_prefix}{}
+\item{package_regex}{regex that matches the what to look for for the packages (Optional) defaults to "^package:"}
 }
 \value{
 character A character vector containing the names of all packages currently loaded in memory.
 }
 \description{
+This function identifies and lists all packages currently loaded in the R environment.
+
 Returns a character vector of loaded package names.
 }
 \details{
-This function identifies and lists all packages currently loaded in the R environment.
-
 The function achieves this by examining the search path and extracting entries that begin with "package:". It then removes the "package:" prefix to return a clean list of package names. This is useful for determining which packages are actively available for use without explicitly listing them in the code.
 }
 \examples{

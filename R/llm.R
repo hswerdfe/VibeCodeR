@@ -11,6 +11,7 @@
 
 
 
+
 #' List Available Chat Services in the ellmer Package
 #'
 #' This function lists the available chat services provided by the 'ellmer' package.
@@ -26,8 +27,8 @@
 #' llm_services()
 #' }
 llm_services <- function(){
-  pkg = "ellmer"
-  pattern = "^chat_"
+  pkg <- "ellmer"
+  pattern <- "^chat_"
   if (!requireNamespace(pkg, quietly = TRUE)) {
     base::stop(base::sprintf("Package '%s' is not installed.", pkg))
   }
@@ -77,11 +78,13 @@ llm_services <- function(){
 llm_models <- function(service){
   #service = 'Google Gemini'
   #service = "Huggingface"
-  models_function_name <- 
+  models_function_suffixes <- 
     service |>
     stringr::str_to_lower() |>
-    stringr::str_replace_all(' ', '_') %>%
-    base::paste0('models_', .)
+    stringr::str_replace_all(' ', '_') 
+  
+  models_function_name <- 
+    base::paste0('models_', models_function_suffixes)
   
   models_func <- 
     base::tryCatch(
@@ -93,7 +96,7 @@ llm_models <- function(service){
       }
     )
   
-  models_func() |>magrittr::extract2('id')
+  models_func() |> magrittr::extract2('id')
     
 }
 
@@ -106,7 +109,7 @@ llm_models <- function(service){
 #'
 #' Retrieves a list of all available services models within the 'ellmer' package.
 #' @description Lists all language models available in the 'ellmer' package.
-#' @details This function identifies services models by listing objects within the 'ellmer' package that match the pattern "models\_". It then removes the "models\_" prefix, replaces underscores with spaces, and converts the resulting strings to title case for improved readability. This provides a user-friendly listing of available models.
+#' @details This function identifies services models by listing objects within the 'ellmer' package that match the pattern models_ then if returns human readable names
 #' @return character A character vector containing the names of all available language models.
 #' @examples
 #' \dontrun{
@@ -114,8 +117,11 @@ llm_models <- function(service){
 #' llm_models_all()
 #' }
 llm_models_all <- function(){
-  pkg = "ellmer"
-  pattern = "^models_"
+  if (FALSE) ellmer::models_anthropic() # replace with any real function!
+  
+  
+  pkg <- "ellmer"
+  pattern <- "^models_"
   if (!requireNamespace(pkg, quietly = TRUE)) {
     base::stop(base::sprintf("Package '%s' is not installed.", pkg))
   }
@@ -134,29 +140,30 @@ llm_models_all <- function(){
 
 
 
-#' Default LLM object
+# Default LLM object
 llm_default <- function(...){
   # TODO : hook upto config file
+  
+  
+  # Ensures ellmer explicitly imported
+  if (FALSE) ellmer::chat_google_gemini(...) # replace with any real function!
+  
+  
   pkg <- 'ellmer'
-  pattern = '^chat_'
+  pattern <- '^chat_'
   base::paste0(
     pkg, '::',
     base::getNamespaceExports(pkg) |>
       stringr::str_subset(pattern = pattern) 
   )
-  
-  
-  
+
   function_name <- 
     base::paste0('chat_', 
       read_vibe_coder_config('.default_llm_service.config') |>
         snakecase::to_snake_case()
     ) 
-  
-  
-  
-  
   func <- utils::getFromNamespace(function_name, pkg)
+  
   func(...)
 }
 

@@ -32,9 +32,11 @@ a list of rules (each optionally prefixed with a list item marker), and a postfi
 a lead-in for code). Each component is joined with newline characters for readability.
 }
 \examples{
+\dontrun{
 generate_pre_prompt(
   vector_rules = c("Do not use external libraries", "Use vectorized operations"),
   prefixes = "Please follow these coding rules:",
   postfixes = "Here is the R code:"
 )
+}
 }

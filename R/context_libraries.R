@@ -7,7 +7,10 @@
 #'
 #' This function retrieves a list of all installed R packages.
 #' @description Lists all installed R packages.
-#' @details This function uses the `library()` function to get a list of installed packages and extracts the package names from the results. It returns a character vector containing the names of the installed packages. This function is useful for determining which packages are available for use in your R environment.
+#' @details This function uses the `library()` function to get a list of installed packages and extracts 
+#' the package names from the results. 
+#' It returns a character vector containing the names of the installed packages. 
+#' This function is useful for determining which packages are available for use in your R environment.
 #' @return character A character vector containing the names of all installed R packages.
 #' @examples
 #' \dontrun{
@@ -25,7 +28,8 @@
 #' }
 #' }
 libraries_installed <- function(){
-  base::library()$results[,1]  
+  #base::library()$results[,1]  
+  utils::installed.packages()[, "Package"]
 }
 
 
@@ -35,9 +39,10 @@ libraries_installed <- function(){
 
 #' List Packages Loaded in Memory
 #'
+#' @description
 #' This function identifies and lists all packages currently loaded in the R environment.
 #'
-#' @param package_prefix 
+#' @param package_regex regex that matches the what to look for for the packages (Optional) defaults to "^package:"
 #'
 #' @description Returns a character vector of loaded package names.
 #' @details The function achieves this by examining the search path and extracting entries that begin with "package:". It then removes the "package:" prefix to return a clean list of package names. This is useful for determining which packages are actively available for use without explicitly listing them in the code.
@@ -55,10 +60,10 @@ libraries_installed <- function(){
 #'   print("dplyr is not loaded.")
 #' }
 #' }
-libraries_in_memmory <- function(package_prefix = "^package:"){
+libraries_in_memmory <- function(package_regex = "^package:"){
   base::search() |>
-    stringr::str_subset(package_prefix) |>
-    stringr::str_remove_all(package_prefix)
+    stringr::str_subset(package_regex) |>
+    stringr::str_remove_all(package_regex)
 }
 
 
@@ -292,8 +297,6 @@ functions_in_memory <- function(.env = .GlobalEnv){
 #'   \item To debug namespace issues and conflicts.
 #' }
 #'
-#' @param None
-#'
 #' @return A character vector containing the names of functions loaded from attached packages, in the format "package::function".
 #' @examples
 #' \dontrun{
@@ -313,11 +316,23 @@ functions_libraries_in_memmory <- function(){
     stringr::str_subset('^package:') |>
     stringr::str_subset('^package:base$', negate = TRUE) |>
     purrr::map(\(env_name){
+      #env_name <- 'package:VibeCodeR'
       env_objects <- ls(env_name)
-      functions_in_env <- env_objects[base::sapply(env_objects, function(x) {
-        tryCatch(base::is.function(base::get(x, envir = base::as.environment(env_name))), 
-                 error = function(e) FALSE)
-      })]
+      # functions_in_env <- env_objects[base::sapply(env_objects, function(x) {
+      #   tryCatch(base::is.function(base::get(x, envir = base::as.environment(env_name))), 
+      #            error = function(e) FALSE)
+      # })]
+      functions_in_env <- env_objects[vapply(
+        env_objects,
+        function(x) {
+          tryCatch(
+            is.function(get(x, envir = as.environment(env_name), inherits = FALSE)),
+            error = function(e) FALSE
+          )
+        },
+        logical(1)  # <-- ensures a logical vector is returned
+      )]
+      
       base::paste0(stringr::str_remove(env_name, '^package:'), '::', functions_in_env)
     }) |> base::unlist() |> 
     base::unique()

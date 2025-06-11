@@ -16,7 +16,9 @@ Character string with function name
 Extracts function name from function definition
 }
 \examples{
+ \dontrun{
   extract_function_name(".myFunc = function() {}")
   extract_function_name("f <<- function(...) NULL")
   extract_function_name("foo <- function(x) x + 1")
+ }
 }

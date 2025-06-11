@@ -42,7 +42,7 @@
 #'
 #' choice <- show_diff_gadget(original_text, refactored_text, 
 #'                           dialog_title = "Review Changes",
-#'                           instructions_given = "Please review the changes carefully before deciding.")
+#'                           instructions_given = "review the changes before deciding.")
 #' print(paste("User chose:", choice))
 #'
 #' # Example with shorter strings
@@ -53,7 +53,7 @@
 #' print(paste("User chose:", choice2))
 #' }
 show_diff_gadget <- function(original, refactored,
-                             dialog_title = "🤖 Do you accept the changes? 🤔!",
+                             dialog_title = "\U0001F916 Do you accept the changes? \U0001F914!",
                              instructions_given = NULL) {
   
   Original <- base::strsplit(original, "\n")[[1]] 
@@ -175,11 +175,11 @@ show_diff_gadget <- function(original, refactored,
         class = "button-container",
         shiny::div(
           class = "button-left",
-          shiny::actionButton("keep", "❌ Keep Original", class = "btn btn-keep")
+          shiny::actionButton("keep", "	\u274C Keep Original", class = "btn btn-keep")
         ),
         shiny::div(
           class = "button-right",
-          shiny::actionButton("accept", "✅ Accept Refactored", class = "btn btn-accept")
+          shiny::actionButton("accept", "\u2705 Accept Changes", class = "btn btn-accept")
         )
       )
     )

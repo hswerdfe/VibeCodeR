@@ -1,9 +1,9 @@
 Package: VibeCodeR
-Title: Custom RStudio Project Template
+Title: Integrate RStudioAPI With Large Language Models
 Version: 0.1.0
 Author: Howard Swerdfeger <hswerdfe@gmail.com>
 Maintainer: Howard Swerdfeger <hswerdfe@gmail.com>
-Description: Adds a custom project template to RStudio's New Project dialog.
+Description: Provides RStudio Add-ins that integrate the RStudio API with large language models. Includes a custom project template and tools for generating function skeletons, inserting Roxygen documentation, and streamlining code editing with interactive interfaces.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -16,16 +16,16 @@ Imports:
     ellmer,
     glue,
     here,
-    htmltools,
     janitor,
     magrittr,
     miniUI,
     purrr,
     rstudioapi,
     shiny,
-    shinyWidgets,
     snakecase,
     sodium,
     stringr,
     tibble,
     utils
+URL: https://github.com/hswerdfe/VibeCodeR
+BugReports: https://github.com/hswerdfe/VibeCodeR/issues

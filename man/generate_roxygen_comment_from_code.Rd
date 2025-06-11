@@ -2,18 +2,45 @@
 % Please edit documentation in R/generate_roxygen_comment.R
 \name{generate_roxygen_comment_from_code}
 \alias{generate_roxygen_comment_from_code}
-\title{generate_roxygen_comment_from_code}
+\title{Generate Roxygen2 Comment from Function Code}
 \usage{
-generate_roxygen_comment_from_code(func_code, ...)
+generate_roxygen_comment_from_code(
+  function_code,
+  function_comment,
+  function_name,
+  file_extension,
+  context,
+  ...
+)
 }
 \arguments{
-\item{func_code}{}
+\item{function_code}{Character, the function code to document.}
 
-\item{...}{}
+\item{function_comment}{Character, any existing roxygen2 comment for the function.}
+
+\item{function_name}{Character, the name of the function.}
+
+\item{file_extension}{Character, the file extension of the R script (e.g., "R").}
+
+\item{context}{List, context information, typically obtained from `rstudioapi::getSourceEditorContext()`.}
+
+\item{...}{Additional arguments passed to other methods.}
 }
 \value{
-the string returned from the LLM
+Character, a string containing the generated roxygen2 comment.
+REMEMBER ONLY THE COMMENT!!!',
 }
 \description{
-generate_roxygen_comment_from_code
+Creates a roxygen2 comment string based on the given function code.
+}
+\details{
+Generates a roxygen2 documentation comment block from provided function code.
+
+This function takes function code, an existing comment, the function name,
+  file extension, and context information, and uses an LLM to generate a roxygen2
+  comment block. It constructs a prompt using configuration files and the provided
+  function details, sends it to the LLM via `llm_request()`, and extracts the comment
+  from the response. If no existing comment is available, "<<MISSING>>" is used as
+  a placeholder. The context is passed to `context_prompts()` to include relevant
+  information in the prompt.
 }

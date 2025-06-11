@@ -15,7 +15,10 @@ Lists all installed R packages.
 \details{
 This function retrieves a list of all installed R packages.
 
-This function uses the `library()` function to get a list of installed packages and extracts the package names from the results. It returns a character vector containing the names of the installed packages. This function is useful for determining which packages are available for use in your R environment.
+This function uses the `library()` function to get a list of installed packages and extracts 
+the package names from the results. 
+It returns a character vector containing the names of the installed packages. 
+This function is useful for determining which packages are available for use in your R environment.
 }
 \examples{
 \dontrun{

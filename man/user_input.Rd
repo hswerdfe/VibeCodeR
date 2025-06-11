@@ -30,6 +30,7 @@ with a `question` string and optional `choices` vector (which becomes
 a dropdown if choices are present).
 }
 \examples{
+\dontrun{
 questions <- list(
   "Enter your name:",
   list(question = "Choose a color:", choices = c("Red", "Green", "Blue")),
@@ -47,6 +48,6 @@ questions <- list(
 )
 
 responses <- user_input(questions)
-
+}
 
 }

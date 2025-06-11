@@ -2,13 +2,27 @@
 % Please edit documentation in R/generate_roxygen_comment.R
 \name{generate_roxygen_comment}
 \alias{generate_roxygen_comment}
-\title{Generate Roxygen Comment}
+\title{Generate Roxygen2 Comment for Current Function in RStudio}
 \usage{
 generate_roxygen_comment()
 }
 \value{
-Inserts Roxygen comment block above the function.
+No return value. This function operates by side effect, modifying the R script in RStudio.
 }
 \description{
-Adds a Roxygen skeleton for the function at the current cursor position.
+Automatically creates a roxygen2 comment block for a function.
+}
+\details{
+Generates a roxygen2 documentation comment block for the R function
+at the current cursor position in RStudio, replacing any existing comments.
+
+This function uses `rstudioapi` to get the function's code,
+  name, and existing comments. It then generates a roxygen2 skeleton
+  and inserts it above the function in the R script.
+  This function operates by side effect, modifying the current R script.
+}
+\examples{
+\dontrun{
+generate_roxygen_comment()
+}
 }
