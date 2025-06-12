@@ -151,11 +151,12 @@ llm_default <- function(...){
   
   pkg <- 'ellmer'
   pattern <- '^chat_'
-  base::paste0(
-    pkg, '::',
-    base::getNamespaceExports(pkg) |>
-      stringr::str_subset(pattern = pattern) 
-  )
+  
+  # base::paste0(
+  #   pkg, '::',
+  #   base::getNamespaceExports(pkg) |>
+  #     stringr::str_subset(pattern = pattern) 
+  # )
 
   function_name <- 
     base::paste0('chat_', 

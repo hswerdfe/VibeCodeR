@@ -15,7 +15,8 @@ create_vibe_project <- function(
     include_readme = TRUE,
     ...
 ) {
-
+  #path= here::here() 
+  print(path)
   # Ensure the package namespace is available
   if (!requireNamespace("VibeCodeR", quietly = TRUE)) {
     stop("VibeCodeR package not found")
@@ -51,25 +52,23 @@ create_vibe_project <- function(
     writeLines(file.path(path, paste0(basename(path), ".Rproj")))
 
   # Create a welcome R script
-  welcome_content <- paste0(
-    "# Welcome to your Vibe Project!\n",
-    "# Created on: ", Sys.Date(), "\n",
-    "#\n",
-    "# Project: ", project_name, "\n",
-    "#\n"
-  )
+  welcome_content <- 
+    paste0("# ",
+      c(
+        "Welcome to your Vibe Project!",
+        "-----------------------------",
+        paste("Created on: ", Sys.Date()),
+        "",
+        paste0("Project: `", project_name, "`"),
+        "",
+        "Access VibeCodeR functionality from either the `Addins ` drop down from the RStudio toolbar,",
+        "Or from the pallet `Ctrl + Shift + p` the type `VibeCodeR`.",
+        "to see options available in current version."
+      ), collapse = '\n' 
+    ) 
 
-  # Add any custom parameters from the form
-  if (length(params) > 2) {  # More than the standard  parameters
-    welcome_content <- paste0(welcome_content, "# Additional parameters:\n")
-    extra_params <- params[!names(params) %in% c("project_name", "project_goal", "include_readme", "vibe_level", "music_genre")]
-    for (name in names(extra_params)) {
-      welcome_content <- paste0(welcome_content, "# ", name, ": ", extra_params[[name]], "\n")
-    }
-    welcome_content <- paste0(welcome_content, "#\n")
-  }
 
-  welcome_content <- paste0(welcome_content, "\n\n# Start coding your vibe! \U0001F3B5\nprint('Welcome to VibeCodeR!')\n")
+
 
   writeLines(welcome_content, file.path(path, "welcome.R"))
 
@@ -98,9 +97,13 @@ create_vibe_project <- function(
   }
   default_results |>
     purrr::iwalk(~{
-      print(.y)
+      #print(.y)
       if (nchar(.x) > 0 ){
-        writeLines(.x, file.path(path_coder, paste0('.', .y, '.config')))
+        .x <- as.character(.x)
+        writeLines(
+            text = .x, 
+            con = file.path(path_coder, paste0('.', .y, '.config'))
+        )
       }
     })
 

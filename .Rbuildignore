@@ -1,2 +1,11 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^LICENSE\.md$
+^\sandbox$
+^icon_options$
+^sourceR\.R$
+^welcome\.R$
+^sandbox$
+^.VibeCodeR$
+^CRAN-SUBMISSION$
+^cran-comments\.md$

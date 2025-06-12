@@ -210,6 +210,12 @@ show_diff_gadget <- function(original, refactored,
   shiny::runGadget(ui, server)
 }
 
+
+
+
+
+
+
 # Example usage
 # original <- "x <- 1\ny <- 2"
 # refactored <- "x <- 1#x is one\ny <- 2"

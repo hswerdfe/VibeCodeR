@@ -22,3 +22,13 @@ Name: Generate Tests
 Description: generates tests for the current function
 Binding: generate_testthat
 Interactive: true
+
+Name: Generate clipboard help
+Description: Get some help with highlighted text
+Binding: generate_clipboard_error_help
+Interactive: true
+
+Name: Generate last error help
+Description: Get help with the last error in the session.
+Binding: generate_last_error_help
+Interactive: true
